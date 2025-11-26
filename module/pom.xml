@@ -13,4 +13,10 @@
     <packaging>pom</packaging>
 
 
+    <modules>
+        <module>ice-starter-web</module>
+        <module>ice-starter-common</module>
+    </modules>
+
+
 </project>

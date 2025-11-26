@@ -3,18 +3,18 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>com.songshilong</groupId>
-        <artifactId>chemical-platform-backend</artifactId>
-        <version>1.0-SNAPSHOT</version>
-    </parent>
 
+
+    <groupId>com.songshilong</groupId>
+    <version>1.1-SNAPSHOT</version>
     <artifactId>dependencies</artifactId>
     <packaging>pom</packaging>
 
     <properties>
         <spring-boot.version>3.5.8</spring-boot.version>
         <spring-cloud.version>2025.0.0</spring-cloud.version>
+        <jwt.version>4.5.0</jwt.version>
+        <hutool-all.version>5.8.41</hutool-all.version>
     </properties>
 
     <dependencyManagement>
@@ -36,6 +36,18 @@
                 <version>${spring-cloud.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.auth0</groupId>
+                <artifactId>java-jwt</artifactId>
+                <version>${jwt.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-all</artifactId>
+                <version>${hutool-all.version}</version>
             </dependency>
 
         </dependencies>

@@ -39,3 +39,5 @@ build/
 .DS_Store
 
 /.idea/
+
+/service/user-service/src/main/resources/application.yaml
