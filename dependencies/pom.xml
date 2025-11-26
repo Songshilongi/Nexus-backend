@@ -15,6 +15,8 @@
         <spring-cloud.version>2025.0.0</spring-cloud.version>
         <jwt.version>4.5.0</jwt.version>
         <hutool-all.version>5.8.41</hutool-all.version>
+        <mybatis-plus-bom.version>3.5.14</mybatis-plus-bom.version>
+        <mysql-connector-j.version>9.4.0</mysql-connector-j.version>
     </properties>
 
     <dependencyManagement>
@@ -49,6 +51,23 @@
                 <artifactId>hutool-all</artifactId>
                 <version>${hutool-all.version}</version>
             </dependency>
+
+
+            <!-- https://mvnrepository.com/artifact/com.mysql/mysql-connector-j -->
+            <dependency>
+                <groupId>com.mysql</groupId>
+                <artifactId>mysql-connector-j</artifactId>
+                <version>${mysql-connector-j.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-bom</artifactId>
+                <version>${mybatis-plus-bom.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
 
         </dependencies>
     </dependencyManagement>
