@@ -38,6 +38,26 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>
+
+        <!--&lt;!&ndash; https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-starter-webmvc-ui &ndash;&gt;-->
+        <!--<dependency>-->
+        <!--    <groupId>org.springdoc</groupId>-->
+        <!--    <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>-->
+        <!--    <version>3.0.0</version>-->
+        <!--</dependency>-->
+        <!--&lt;!&ndash; https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-starter-webmvc-api &ndash;&gt;-->
+        <!--<dependency>-->
+        <!--    <groupId>org.springdoc</groupId>-->
+        <!--    <artifactId>springdoc-openapi-starter-webmvc-api</artifactId>-->
+        <!--    <version>3.0.0</version>-->
+        <!--</dependency>-->
+        <!-- Spring Boot OpenAPI依赖 -->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-boot-starter</artifactId>
+            <version>3.0.0</version>
+        </dependency>
+
     </dependencies>
 
 
