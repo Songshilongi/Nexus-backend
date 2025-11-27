@@ -31,6 +31,24 @@ spring:
       host: *
       port: 6379
       password: *
+  mail:
+    host: *
+    username: *
+    password: *
+    port: 465
+    default-encoding: UTF-8
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          ssl:
+            enable: true
+          socketFactory:
+            port: 465
+            class: javax.net.ssl.SSLSocketFactory
 
 
 mybatis-plus:
