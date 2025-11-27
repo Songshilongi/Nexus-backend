@@ -12,4 +12,31 @@ server:
   port: 9001
   servlet:
     context-path: /api/user-service
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: *
+    username: *
+    password: *
+  data:
+    mongodb:
+      host: *
+      port: 27017
+      username: *
+      password: *
+      database: *
+      authentication-database: admin
+
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations: classpath*:/mapper/**/*.xml
+  global-config:
+    db-config:
+      logic-delete-field: deleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+
 ```
