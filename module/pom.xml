@@ -18,6 +18,7 @@
         <module>ice-starter-common</module>
         <module>ice-starter-database</module>
         <module>ice-starter-redis</module>
+        <module>ice-starter-mail</module>
     </modules>
 
 

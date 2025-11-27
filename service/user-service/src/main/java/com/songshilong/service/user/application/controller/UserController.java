@@ -1,8 +1,11 @@
 package com.songshilong.service.user.application.controller;
 
 import com.songshilong.module.starter.common.result.Result;
+import com.songshilong.service.user.domain.user.req.PasswordMailResetRequest;
+import com.songshilong.service.user.domain.user.req.ResetPasswordRequest;
 import com.songshilong.service.user.domain.user.req.UserLoginRequest;
 import com.songshilong.service.user.domain.user.req.UserRegisterRequest;
+import com.songshilong.service.user.domain.user.res.PasswordMailResetResponse;
 import com.songshilong.service.user.domain.user.res.UserLoginResponse;
 import com.songshilong.service.user.domain.user.res.UserRegisterResponse;
 import com.songshilong.service.user.interfaces.service.user.UserService;
@@ -41,6 +44,20 @@ public class UserController {
     public Result<UserLoginResponse> login(@RequestBody @Validated UserLoginRequest userLoginRequest) {
         UserLoginResponse userLoginResponse = userService.login(userLoginRequest);
         return Result.success(userLoginResponse);
+    }
+
+    @PostMapping("/reset/mail-code")
+    @ApiOperation(value = "获取邮箱验证码用于重置密码")
+    public Result<PasswordMailResetResponse> getPasswordMailResetCode(@RequestBody PasswordMailResetRequest passwordMailResetRequest){
+        PasswordMailResetResponse response = userService.getPasswordMailResetCode(passwordMailResetRequest);
+        return Result.success(response);
+    }
+
+    @PostMapping("/reset")
+    @ApiOperation(value = "重置密码")
+    public Result<Boolean> resetPasswordByEmailVerifyCode(@RequestBody ResetPasswordRequest resetPasswordRequest) {
+        Boolean result = userService.resetPasswordByEmailVerifyCode(resetPasswordRequest);
+        return Result.success(result);
     }
 
 }
