@@ -1,4 +1,4 @@
-package com.songshilong.service.user.application.controller.service;
+package com.songshilong.service.user.application.service;
 
 import com.songshilong.service.user.domain.user.req.UserRegisterRequest;
 import com.songshilong.service.user.domain.user.res.UserRegisterResponse;
