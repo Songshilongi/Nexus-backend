@@ -25,6 +25,7 @@
         <module>dependencies</module>
         <module>module</module>
         <module>service</module>
+        <module>service/gateway-service</module>
     </modules>
 
 
