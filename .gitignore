@@ -42,3 +42,5 @@ build/
 
 /service/user-service/src/main/resources/application.yaml
 /service/gateway-service/src/main/resources/application.yaml
+/service/chat-service/src/main/resources/application.yaml
+

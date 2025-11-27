@@ -14,4 +14,4 @@ CREATE TABLE `user_info`
     `update_by`   VARCHAR(50) DEFAULT NULL COMMENT '更新人',
     `deleted`     TINYINT     DEFAULT 0 COMMENT '删除标志(0-未删除, 1-已删除)',
     PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='用户信息表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='用户信息表';

@@ -26,6 +26,7 @@
         <module>module</module>
         <module>service</module>
         <module>service/gateway-service</module>
+        <module>service/chat-service</module>
     </modules>
 
 
