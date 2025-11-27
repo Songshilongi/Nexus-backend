@@ -12,9 +12,19 @@ import org.springframework.data.redis.core.StringRedisTemplate;
  * @Version: 1.0
  */
 @RequiredArgsConstructor
-public class RedisUtil implements Cache{
+public class RedisUtil implements Cache {
 
-    private final StringRedisTemplate stringRedisTemplate;
+    private final StringRedisTemplate redisTemplate;
 
+
+    @Override
+    public Boolean setIsMember(String key, Object obj) {
+        return redisTemplate.opsForSet().isMember(key, obj);
+    }
+
+    @Override
+    public void setAdd(String key, String... value) {
+        redisTemplate.opsForSet().add(key, value);
+    }
 
 }

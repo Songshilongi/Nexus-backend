@@ -12,5 +12,20 @@ import com.songshilong.service.user.domain.user.res.UserRegisterResponse;
  * @Version: 1.0
  */
 public interface UserService {
+
+    /**
+     * 判断用户名是否已经存在
+     *
+     * @param username 用户名
+     * @return true-已经存在 false-不存在
+     */
+    Boolean hasUsername(String username);
+
+    /**
+     * 注册
+     *
+     * @param userRegisterRequest {@link UserRegisterRequest} 注册需要的用户数据
+     * @return {@link UserRegisterResponse} 注册结果
+     */
     UserRegisterResponse register(UserRegisterRequest userRegisterRequest);
 }
