@@ -27,6 +27,10 @@ spring:
       password: *
       database: *
       authentication-database: admin
+    redis:
+      host: *
+      port: 6379
+      password: *
 
 
 mybatis-plus:

@@ -17,6 +17,7 @@
         <module>ice-starter-web</module>
         <module>ice-starter-common</module>
         <module>ice-starter-database</module>
+        <module>ice-starter-redis</module>
     </modules>
 
 

@@ -17,6 +17,7 @@
         <hutool-all.version>5.8.41</hutool-all.version>
         <mybatis-plus-bom.version>3.5.14</mybatis-plus-bom.version>
         <mysql-connector-j.version>9.4.0</mysql-connector-j.version>
+        <redisson.version>3.46.0</redisson.version>
     </properties>
 
     <dependencyManagement>
@@ -66,6 +67,12 @@
                 <version>${mybatis-plus-bom.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.redisson</groupId>
+                <artifactId>redisson-spring-boot-starter</artifactId>
+                <version>${redisson.version}</version>
             </dependency>
 
 
