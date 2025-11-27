@@ -5,9 +5,9 @@
 CREATE TABLE `user_info`
 (
     `id`          BIGINT       NOT NULL AUTO_INCREMENT COMMENT '主键 ID',
-    `username`    VARCHAR(50)  NOT NULL COMMENT '用户名/用户昵称',
-    `password`    VARCHAR(100) NOT NULL COMMENT '用户密码',
-    `email`       VARCHAR(100) DEFAULT NULL COMMENT '用户邮箱',
+    `username`    VARCHAR(20)  NOT NULL COMMENT '用户名/用户昵称',
+    `password`    VARCHAR(20) NOT NULL COMMENT '用户密码',
+    `email`       VARCHAR(50) DEFAULT NULL COMMENT '用户邮箱',
     `create_time` DATETIME     DEFAULT NULL COMMENT '创建时间',
     `create_by`   VARCHAR(50)  DEFAULT NULL COMMENT '创建人',
     `update_time` DATETIME     DEFAULT NULL COMMENT '更新时间',
