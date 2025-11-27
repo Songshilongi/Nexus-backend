@@ -1,7 +1,9 @@
 package com.songshilong.service.user.application.controller;
 
 import com.songshilong.module.starter.common.result.Result;
+import com.songshilong.service.user.domain.user.req.UserLoginRequest;
 import com.songshilong.service.user.domain.user.req.UserRegisterRequest;
+import com.songshilong.service.user.domain.user.res.UserLoginResponse;
 import com.songshilong.service.user.domain.user.res.UserRegisterResponse;
 import com.songshilong.service.user.interfaces.service.user.UserService;
 import io.swagger.annotations.Api;
@@ -32,6 +34,13 @@ public class UserController {
     public Result<UserRegisterResponse> register(@RequestBody @Validated UserRegisterRequest userRegisterRequest) {
         UserRegisterResponse userRegisterResponse = userService.register(userRegisterRequest);
         return Result.success(userRegisterResponse);
+    }
+
+    @PostMapping("/login")
+    @ApiOperation(value = "用户登录")
+    public Result<UserLoginResponse> login(@RequestBody @Validated UserLoginRequest userLoginRequest) {
+        UserLoginResponse userLoginResponse = userService.login(userLoginRequest);
+        return Result.success(userLoginResponse);
     }
 
 }

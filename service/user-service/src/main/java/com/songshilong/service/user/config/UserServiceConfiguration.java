@@ -1,5 +1,6 @@
 package com.songshilong.service.user.config;
 
+import com.songshilong.module.starter.common.properties.UserJwtProperty;
 import com.songshilong.service.user.infrastructure.properties.UsernameBloomFilterProperty;
 import org.redisson.api.RBloomFilter;
 import org.redisson.api.RedissonClient;
@@ -16,7 +17,7 @@ import org.springframework.context.annotation.Configuration;
  * @Version: 1.0
  */
 @Configuration
-@EnableConfigurationProperties(UsernameBloomFilterProperty.class)
+@EnableConfigurationProperties({UsernameBloomFilterProperty.class, UserJwtProperty.class})
 public class UserServiceConfiguration {
 
 
