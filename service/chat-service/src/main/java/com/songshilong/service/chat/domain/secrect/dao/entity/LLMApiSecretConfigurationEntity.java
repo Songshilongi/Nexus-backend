@@ -37,6 +37,11 @@ public class LLMApiSecretConfigurationEntity extends BaseEntity {
     private String configurationName;
 
     /**
+     * API密钥
+     */
+    private String apiKey;
+
+    /**
      * 用户自定义LLM配置的base_url
      */
     private String baseUrl;

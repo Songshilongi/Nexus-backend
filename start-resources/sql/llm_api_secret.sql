@@ -3,6 +3,7 @@ CREATE TABLE `llm_api_secret`
     `id`                 BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '主键ID',
     `user_id`            BIGINT       NOT NULL COMMENT '用户ID',
     `configuration_name` VARCHAR(100) NOT NULL COMMENT '用户自定义LLM配置的名字',
+    `api_key`            VARCHAR(100) NOT NULL COMMENT 'API KEY',
     `base_url`           VARCHAR(200) NOT NULL COMMENT '用户自定义LLM配置的base_url',
     `llm_model_id`       VARCHAR(50)  NOT NULL COMMENT 'LLM模型名字（如 qwen、gpt-4o 等）',
     `temperature`        DECIMAL(3, 1)         DEFAULT NULL COMMENT 'LLM的temperature，取值范围一般 0~2.0',
