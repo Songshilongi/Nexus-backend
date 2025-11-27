@@ -16,10 +16,13 @@ import org.springframework.context.annotation.Configuration;
  * @Description: UserServiceConfiguration
  * @Version: 1.0
  */
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
 @Configuration
 @EnableConfigurationProperties({UsernameBloomFilterProperty.class, UserJwtProperty.class})
-public class UserServiceConfiguration {
-
+public class UserServiceConfiguration implements WebMvcConfigurer {
 
     @Bean
     public RBloomFilter<String> usernameBloomFilter(RedissonClient redissonClient, UsernameBloomFilterProperty usernameBloomFilterProperty) {
@@ -28,4 +31,13 @@ public class UserServiceConfiguration {
         return usernameBloomFilter;
     }
 
+    // 👇 添加 CORS 全局配置 （TODO 如果使用Nginx或者Gateway之后可以处理掉）
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")               // 所有路径
+                .allowedOrigins("*")             // 允许所有源（⚠️不能与 allowCredentials(true) 同时使用）
+                .allowedMethods("*")             // 允许所有 HTTP 方法
+                .allowedHeaders("*")             // 允许所有请求头
+                .allowCredentials(false);        // 必须为 false（因为 origins 是 *）
+    }
 }
