@@ -47,4 +47,12 @@ public interface LLMApiSecretService {
      * @return 是否删除成功
      */
     Boolean deleteConfiguration(String userId, String configurationName);
+
+    /**
+     * 获取某个用户的所有配置名称列表
+     * @param userId 用户ID
+     * @return 配置名称列表
+     */
+    List<String> getAllConfigurationNames(Long userId);
+
 }

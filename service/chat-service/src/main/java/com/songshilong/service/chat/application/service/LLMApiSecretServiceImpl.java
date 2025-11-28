@@ -103,4 +103,15 @@ public class LLMApiSecretServiceImpl implements LLMApiSecretService {
         }
         return Boolean.TRUE;
     }
+
+    @Override
+    public List<String> getAllConfigurationNames(Long userId) {
+        LambdaQueryWrapper<LLMApiSecretConfigurationEntity> queryWrapper = Wrappers.lambdaQuery(LLMApiSecretConfigurationEntity.class)
+                .select(LLMApiSecretConfigurationEntity::getConfigurationName)
+                .eq(LLMApiSecretConfigurationEntity::getUserId, userId);
+        List<LLMApiSecretConfigurationEntity> entities = this.llmApiSecretConfigurationMapper.selectList(queryWrapper);
+        return entities.stream()
+                .map(LLMApiSecretConfigurationEntity::getConfigurationName)
+                .collect(Collectors.toList());
+    }
 }

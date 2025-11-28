@@ -9,6 +9,7 @@ import com.songshilong.service.chat.domain.secrect.res.LLMApiSecretConfiguration
 import com.songshilong.service.chat.interfaces.service.secrect.LLMApiSecretService;
 import com.songshilong.starter.database.base.PageResult;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
@@ -42,6 +43,13 @@ public class LLMApiSecretController {
     ) {
         PageResult<LLMApiSecretConfigurationResponse> llmApiSecretConfigurationResponseList = llmApiSecretService.queryConfiguration(userId, queryConfigurationRequest);
         return Result.success(llmApiSecretConfigurationResponseList);
+    }
+
+    @GetMapping("/users/{userId}/configurations")
+    @ApiOperation("查询某个用户当前的配置名称列表")
+    public Result<List<String>> getAllConfigurations(@ApiParam(value = "用户ID", required = true) @PathVariable("userId") Long userId) {
+        List<String> configurations = llmApiSecretService.getAllConfigurationNames(userId);
+        return Result.success(configurations);
     }
 
     @PostMapping("/users/{userId}")
