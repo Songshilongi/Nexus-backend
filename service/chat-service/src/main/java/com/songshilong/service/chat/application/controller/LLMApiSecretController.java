@@ -38,7 +38,7 @@ public class LLMApiSecretController {
     @ApiOperation("查询某个用户当前的配置")
     public Result<PageResult<LLMApiSecretConfigurationResponse>> queryConfiguration(
             @ApiParam(value = "用户ID", required = true) @PathVariable("userId") Long userId,
-            @RequestBody QueryConfigurationRequest queryConfigurationRequest
+            QueryConfigurationRequest queryConfigurationRequest
     ) {
         PageResult<LLMApiSecretConfigurationResponse> llmApiSecretConfigurationResponseList = llmApiSecretService.queryConfiguration(userId, queryConfigurationRequest);
         return Result.success(llmApiSecretConfigurationResponseList);
