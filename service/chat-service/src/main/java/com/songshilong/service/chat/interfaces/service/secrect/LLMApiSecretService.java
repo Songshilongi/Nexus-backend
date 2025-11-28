@@ -1,8 +1,10 @@
 package com.songshilong.service.chat.interfaces.service.secrect;
 
 import com.songshilong.service.chat.domain.secrect.req.CreateConfigurationRequest;
+import com.songshilong.service.chat.domain.secrect.req.QueryConfigurationRequest;
 import com.songshilong.service.chat.domain.secrect.req.UpdateConfigurationRequest;
 import com.songshilong.service.chat.domain.secrect.res.LLMApiSecretConfigurationResponse;
+import com.songshilong.starter.database.base.PageResult;
 
 import java.util.List;
 
@@ -20,7 +22,7 @@ public interface LLMApiSecretService {
      * @param userId 用户ID
      * @return {@link LLMApiSecretConfigurationResponse}
      */
-    List<LLMApiSecretConfigurationResponse> queryConfiguration(Long userId);
+    PageResult<LLMApiSecretConfigurationResponse> queryConfiguration(Long userId, QueryConfigurationRequest queryConfigurationRequest);
 
     /**
      * 创建配置
