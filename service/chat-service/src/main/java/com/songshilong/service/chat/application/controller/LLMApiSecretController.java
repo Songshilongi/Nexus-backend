@@ -1,15 +1,16 @@
 package com.songshilong.service.chat.application.controller;
 
 import com.songshilong.module.starter.common.result.Result;
+import com.songshilong.service.chat.domain.secrect.req.CreateConfigurationRequest;
+import com.songshilong.service.chat.domain.secrect.req.UpdateConfigurationRequest;
 import com.songshilong.service.chat.domain.secrect.res.LLMApiSecretConfigurationResponse;
 import com.songshilong.service.chat.interfaces.service.secrect.LLMApiSecretService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,17 +24,44 @@ import java.util.List;
  */
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/llm-sec-configuration")
+@RequestMapping("/llm-configuration")
 @Api(tags = "密钥管理相关接口")
 public class LLMApiSecretController {
 
     private final LLMApiSecretService llmApiSecretService;
 
-    @GetMapping("/list/{userId}")
+    @GetMapping("/users/{userId}")
     @ApiOperation("查询某个用户当前的配置")
-    public Result<List<LLMApiSecretConfigurationResponse>> queryConfiguration(@PathVariable("userId") Long userId) {
+    public Result<List<LLMApiSecretConfigurationResponse>> queryConfiguration(@ApiParam(value = "用户ID", required = true) @PathVariable("userId") Long userId) {
         List<LLMApiSecretConfigurationResponse> llmApiSecretConfigurationResponseList = llmApiSecretService.queryConfiguration(userId);
         return Result.success(llmApiSecretConfigurationResponseList);
+    }
+
+    @PostMapping("/users/{userId}")
+    @ApiOperation("创建用户LLM配置")
+    public Result<Boolean> createConfiguration(
+            @ApiParam(value = "用户ID", required = true) @PathVariable("userId") Long userId,
+            @RequestBody @Validated CreateConfigurationRequest createConfigurationRequest) {
+        Boolean res = llmApiSecretService.createConfiguration(userId, createConfigurationRequest);
+        return Result.success(res);
+    }
+
+    @PutMapping("/users/{userId}")
+    @ApiOperation("更新某个配置")
+    public Result<Boolean> updateConfiguration(
+            @ApiParam(value = "用户ID", required = true) @PathVariable("userId") Long userId,
+            @RequestBody @Validated UpdateConfigurationRequest updateConfigurationRequest) {
+        Boolean res = llmApiSecretService.updateConfiguration(userId, updateConfigurationRequest);
+        return Result.success(res);
+    }
+
+    @DeleteMapping("/users/{userId}/{configurationName}")
+    @ApiOperation("删除某个用户配置")
+    public Result<Boolean> deleteConfiguration(
+            @ApiParam(value = "用户ID", required = true) @PathVariable("userId") String userId,
+            @PathVariable("configurationName") String configurationName) {
+        Boolean res = llmApiSecretService.deleteConfiguration(userId, configurationName);
+        return Result.success(res);
     }
 
 
