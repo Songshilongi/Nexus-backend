@@ -13,7 +13,7 @@ import java.util.List;
  * @BelongsPackage: com.songshilong.service.chat.interfaces.service.secrect
  * @Author: Ice, Song
  * @CreateTime: 2025-11-27  21:34
- * @Description: TODO
+ * @Description: LLMApiSecretService
  * @Version: 1.0
  */
 public interface LLMApiSecretService {

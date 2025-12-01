@@ -8,7 +8,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @BelongsPackage: com.songshilong.service.user.infrastructure.properties
  * @Author: Ice, Song
  * @CreateTime: 2025-11-27  11:14
- * @Description: TODO
+ * @Description: UsernameBloomFilterProperty
  * @Version: 1.0
  */
 @Data
