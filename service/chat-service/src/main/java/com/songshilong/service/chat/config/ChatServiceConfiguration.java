@@ -1,5 +1,10 @@
 package com.songshilong.service.chat.config;
 
+import cn.hutool.core.lang.generator.SnowflakeGenerator;
+import com.songshilong.module.starter.common.properties.SnowFlakeProperty;
+import lombok.RequiredArgsConstructor;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -13,7 +18,16 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * @Version: 1.0
  */
 @Configuration
+@EnableConfigurationProperties({SnowFlakeProperty.class})
+@RequiredArgsConstructor
 public class ChatServiceConfiguration implements WebMvcConfigurer {
+
+    private final SnowFlakeProperty snowFlakeProperty;
+
+    @Bean
+    public SnowflakeGenerator snowflakeGenerator() {
+        return new SnowflakeGenerator(snowFlakeProperty.getWorkerId(), snowFlakeProperty.getDataCenterId());
+    }
 
     // 👇 添加 CORS 全局配置 （TODO 如果使用Nginx或者Gateway之后可以处理掉）
     @Override
