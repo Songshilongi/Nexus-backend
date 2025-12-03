@@ -53,6 +53,7 @@ public class TestConnection {
                 .userId(999L)
                 .messages(messages)
                 .lastMessageTimestamp(System.currentTimeMillis())
+                .deleted(0)
                 .build();
         mongoUtil.getInstance().insert(record);
     }
@@ -61,7 +62,7 @@ public class TestConnection {
     public void queryMongo() {
         Long userId = 999L;
         System.out.println(mongoUtil.getInstance().find(
-                        Query.query(Criteria.where("user_id").is(userId)), ConversationRecord.class
+                        Query.query(Criteria.where(ConversationRecord.USER_ID).is(userId)), ConversationRecord.class
                 )
                 .stream()
                 .map(ConversationRecord::getId)
@@ -74,7 +75,7 @@ public class TestConnection {
         System.out.println(mongoUtil.getInstance().find(
                         Query.query(
                                 Criteria.where("user_id").is(userId)
-                                        .and("_id").is(1996139129322082304L)
+                                        .and("_id").is(1996200262057857024L)
                         ),
                         ConversationRecord.class
                 )
@@ -83,7 +84,7 @@ public class TestConnection {
 
     @Test
     public void update() {
-        Criteria criteria = Criteria.where("_id").is(1996139129322082304L);
+        Criteria criteria = Criteria.where("_id").is(1996200262057857024L);
         Query query = Query.query(criteria);
         // 4. **构建更新操作 (Update)**
         Update update = new Update();
@@ -99,6 +100,7 @@ public class TestConnection {
         // 5. **执行更新**
         // 使用 updateFirst() 确保只更新找到的第一个匹配文档
         UpdateResult result = mongoUtil.getInstance().updateFirst(query, update, ConversationRecord.class);
+        System.out.println(result);
 
     }
 

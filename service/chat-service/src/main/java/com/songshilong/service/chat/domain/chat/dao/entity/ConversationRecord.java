@@ -1,5 +1,6 @@
 package com.songshilong.service.chat.domain.chat.dao.entity;
 
+import com.songshilong.service.chat.domain.chat.res.ConversationHistoryResponse;
 import com.songshilong.service.chat.infrastructure.llm.message.Message;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +10,6 @@ import nonapi.io.github.classgraph.json.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -27,6 +27,12 @@ import java.util.List;
 @NoArgsConstructor
 public class ConversationRecord {
 
+    public static String ID = "_id";
+    public static String USER_ID = "user_id";
+    public static String MESSAGES = "messages";
+    public static String LAST_MESSAGE_TIME = "last_message_time";
+    public static String DELETED = "deleted";
+
     @Id
     private Long id;
 
@@ -38,5 +44,12 @@ public class ConversationRecord {
 
     @Field("last_message_time")
     private Long lastMessageTimestamp;
+
+    /**
+     * 0 - 正常
+     * 1 - 已删除
+     */
+    @Field("deleted")
+    private Integer deleted;
 
 }

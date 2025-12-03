@@ -23,6 +23,14 @@ public record Message(String role, String content) {
         return messageBuilder(MessageRoleEnum.ASSISTANT, content);
     }
 
+    public static Message of(String role, String content) {
+        MessageRoleEnum roleEnum = MessageRoleEnum.of(role);
+        if (roleEnum == null) {
+            throw new IllegalArgumentException("Unsupported message role: " + role);
+        }
+        return messageBuilder(roleEnum, content);
+    }
+
     private static Message messageBuilder(MessageRoleEnum roleEnum, String content) {
         return new Message(roleEnum.getRole(), content);
 
