@@ -39,7 +39,7 @@ public class ConversationHistoryResponse {
                         dto.setSummary("空白对话");
                     }
                     return dto;
-                }).toList();
+                }).toList().reversed();
         Long userId = conversationRecords
                 .stream()
                 .findFirst()
