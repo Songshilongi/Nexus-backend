@@ -22,4 +22,6 @@ public class ConversationHistoryView {
     private Long conversationId;
     @ApiModelProperty("消息列表")
     private List<Message> messages;
+    @ApiModelProperty("对话摘要")
+    private String summary;
 }

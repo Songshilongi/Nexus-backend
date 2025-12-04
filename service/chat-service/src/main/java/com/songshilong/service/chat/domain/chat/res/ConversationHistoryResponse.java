@@ -1,5 +1,6 @@
 package com.songshilong.service.chat.domain.chat.res;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.songshilong.service.chat.domain.chat.dao.entity.ConversationRecord;
 import com.songshilong.service.chat.domain.chat.vo.ConversationHistoryView;
 import io.swagger.annotations.ApiModel;
@@ -33,6 +34,9 @@ public class ConversationHistoryResponse {
                     ConversationHistoryView dto = new ConversationHistoryView();
                     dto.setConversationId(record.getId());
                     dto.setMessages(record.getMessages());
+                    if (CollectionUtil.isNotEmpty(record.getMessages()) && record.getMessages().size() > 1) {
+                        dto.setSummary(record.getMessages().getFirst().content());
+                    }
                     return dto;
                 }).toList();
         Long userId = conversationRecords
