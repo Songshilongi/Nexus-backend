@@ -28,15 +28,6 @@ public class ChatController {
 
     private final ChatService chatService;
 
-    /**
-     * (要求用户在输入框输入内容后，调用此接口开始对话)点击空白对话框不算
-     */
-    @PostMapping("conversation/{userId}/start")
-    @ApiOperation("开始对话")
-    public Result<Void> startConversation(@PathVariable("userId") Long userId) {
-        // TODO
-        return Result.success(null);
-    }
 
     @GetMapping("conversation/{userId}/history")
     @ApiOperation("查询所属用户的历史对话记录")
