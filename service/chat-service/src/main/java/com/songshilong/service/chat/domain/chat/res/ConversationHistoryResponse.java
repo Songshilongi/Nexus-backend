@@ -33,7 +33,6 @@ public class ConversationHistoryResponse {
                 .map(record -> {
                     ConversationHistoryView dto = new ConversationHistoryView();
                     dto.setConversationId(record.getId());
-                    dto.setMessages(record.getMessages());
                     if (CollectionUtil.isNotEmpty(record.getMessages()) && record.getMessages().size() > 1) {
                         dto.setSummary(record.getMessages().getFirst().content());
                     }

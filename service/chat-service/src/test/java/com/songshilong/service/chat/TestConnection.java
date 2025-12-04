@@ -50,7 +50,7 @@ public class TestConnection {
         Long chatId = snowflakeGenerator.next();
         ConversationRecord record = ConversationRecord.builder()
                 .id(chatId)
-                .userId(999L)
+                .userId(1L)
                 .messages(messages)
                 .lastMessageTimestamp(System.currentTimeMillis())
                 .deleted(0)

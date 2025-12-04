@@ -20,8 +20,6 @@ import java.util.List;
 public class ConversationHistoryView {
     @ApiModelProperty("对话ID")
     private Long conversationId;
-    @ApiModelProperty("消息列表")
-    private List<Message> messages;
     @ApiModelProperty("对话摘要")
     private String summary;
 }
