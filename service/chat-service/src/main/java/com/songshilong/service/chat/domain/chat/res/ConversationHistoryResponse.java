@@ -35,6 +35,8 @@ public class ConversationHistoryResponse {
                     dto.setConversationId(record.getId());
                     if (CollectionUtil.isNotEmpty(record.getMessages()) && record.getMessages().size() > 1) {
                         dto.setSummary(record.getMessages().getFirst().content());
+                    } else {
+                        dto.setSummary("空白对话");
                     }
                     return dto;
                 }).toList();
