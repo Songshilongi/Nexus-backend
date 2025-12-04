@@ -57,6 +57,7 @@ public class ChatController {
     }
 
     @PutMapping("conversation/{userId}/{conversationId}/message/add")
+    @ApiOperation("向指定会话记录添加消息")
     public Result<Boolean> addMessageToConversation(
             @ApiParam("用户ID")
             @PathVariable("userId") Long userId,
@@ -65,6 +66,18 @@ public class ChatController {
             @RequestBody @Validated AddMessageRequest addMessageRequest
     ) {
         Boolean res = chatService.addMessageToConversation(userId, conversationId, addMessageRequest);
+        return Result.success(res);
+    }
+
+    @DeleteMapping("conversation/{userId}/{conversationId}")
+    @ApiOperation("删除指定会话记录")
+    public Result<Boolean> deleteConversation(
+            @ApiParam("用户ID")
+            @PathVariable("userId") Long userId,
+            @ApiParam("对话ID")
+            @PathVariable("conversationId") Long conversationId
+    ) {
+        Boolean res = chatService.deleteConversation(userId, conversationId);
         return Result.success(res);
     }
 

@@ -12,7 +12,9 @@ import com.songshilong.module.starter.common.exception.ExceptionHandler;
  */
 public enum ChatExceptionEnum implements ExceptionHandler {
     CONVERSATION_NOT_FOUND(60001, "对话未找到"),
-    ADD_MESSAGE_FAIL(60002, "添加消息失败");
+    ADD_MESSAGE_FAIL(60002, "添加消息失败"),
+    DELETE_CONVERSATION_FAIL(60003, "对话记录删除失败")
+    ;
 
 
     private final Integer errorCode;

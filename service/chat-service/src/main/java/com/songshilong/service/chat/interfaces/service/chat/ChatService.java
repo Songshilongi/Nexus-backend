@@ -37,4 +37,12 @@ public interface ChatService {
      * @return {@link ConversationDetailView}
      */
     ConversationDetailView queryConversationDetail(Long userId, Long conversationId);
+
+    /**
+     * 删除对话
+     * @param userId 用户ID
+     * @param conversationId 对话ID
+     */
+    Boolean deleteConversation(Long userId, Long conversationId);
+
 }

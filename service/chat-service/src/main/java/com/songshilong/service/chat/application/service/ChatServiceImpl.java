@@ -76,5 +76,21 @@ public class ChatServiceImpl implements ChatService {
         return ConversationDetailView.fromRecord(record);
     }
 
+    @Override
+    public Boolean deleteConversation(Long userId, Long conversationId) {
+        Query query = Query.query(
+                Criteria.where(ConversationRecord.USER_ID).is(userId)
+                        .and(ConversationRecord.ID).is(conversationId)
+                        .and(ConversationRecord.DELETED).is(0)
+        );
+        Update update = new Update();
+        update.set(ConversationRecord.DELETED, 1);
+        UpdateResult updateResult = mongoUtil.getInstance().updateFirst(query, update, ConversationRecord.class);
+        if (updateResult.getMatchedCount() != 1 || updateResult.getMatchedCount() != 1) {
+            throw new BusinessException(ChatExceptionEnum.DELETE_CONVERSATION_FAIL);
+        }
+        return Boolean.TRUE;
+    }
+
 
 }
