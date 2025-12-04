@@ -1,8 +1,10 @@
 package com.songshilong.service.chat.interfaces.service.chat;
 
 import com.songshilong.service.chat.domain.chat.req.AddMessageRequest;
+import com.songshilong.service.chat.domain.chat.req.ChatCallRequest;
 import com.songshilong.service.chat.domain.chat.res.ConversationHistoryResponse;
 import com.songshilong.service.chat.domain.chat.vo.ConversationDetailView;
+import reactor.core.publisher.Flux;
 
 /**
  * @BelongsProject: chemical-platform-backend
@@ -45,4 +47,17 @@ public interface ChatService {
      */
     Boolean deleteConversation(Long userId, Long conversationId);
 
+    /**
+     * 流式响应调用聊天接口
+     * @param chatCallRequest 聊天请求参数
+     * @return 流式响应结果
+     */
+    Flux<String> chatStream(ChatCallRequest chatCallRequest);
+
+    /**
+     * 创建新的会话
+     * @param userId 用户ID
+     * @return 新创建的会话ID
+     */
+    Long createConversation(Long userId);
 }

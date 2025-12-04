@@ -2,6 +2,7 @@ package com.songshilong.service.chat.infrastructure.llm.core;
 
 import com.songshilong.service.chat.infrastructure.llm.core.req.ChatRequest;
 import com.songshilong.service.chat.infrastructure.llm.message.Message;
+import reactor.core.publisher.Flux;
 
 import java.util.List;
 
@@ -16,6 +17,7 @@ import java.util.List;
 public interface LLMInteraction {
     /**
      * 调用LLM接口）
+     *
      * @param userQuestion 用户问题
      * @return LLM响应内容
      */
@@ -23,16 +25,27 @@ public interface LLMInteraction {
 
     /**
      * 调用LLM接口（多轮对话）
+     *
      * @param messages 消息列表
      * @return LLM响应内容
      */
     String call(List<Message> messages);
+
     /**
      * 调用LLM接口（使用ChatRequest）
+     *
      * @param chatRequest ChatRequest对象
      * @return LLM响应内容
      */
     String call(ChatRequest chatRequest);
+
+    /**
+     * 流式调用LLM接口（使用ChatRequest）
+     *
+     * @param messages 消息列表
+     * @return LLM响应内容流
+     */
+    Flux<String> callStream(List<Message> messages);
 
 
 }

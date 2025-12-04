@@ -1,23 +1,39 @@
 package com.songshilong.service.chat.application.service;
 
+import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.lang.generator.SnowflakeGenerator;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.result.UpdateResult;
 import com.songshilong.module.starter.common.exception.BusinessException;
 import com.songshilong.module.starter.common.exception.enums.ChatExceptionEnum;
 import com.songshilong.service.chat.domain.chat.dao.entity.ConversationRecord;
+import com.songshilong.service.chat.domain.chat.dto.ConversationRecordDTO;
+import com.songshilong.service.chat.domain.chat.dto.UserLLMConfigurationDTO;
 import com.songshilong.service.chat.domain.chat.req.AddMessageRequest;
+import com.songshilong.service.chat.domain.chat.req.ChatCallRequest;
 import com.songshilong.service.chat.domain.chat.res.ConversationHistoryResponse;
 import com.songshilong.service.chat.domain.chat.vo.ConversationDetailView;
+import com.songshilong.service.chat.domain.secrect.dao.entity.LLMApiSecretConfigurationEntity;
+import com.songshilong.service.chat.domain.secrect.dao.mapper.LLMApiSecretConfigurationMapper;
+import com.songshilong.service.chat.infrastructure.llm.core.LLMClient;
+import com.songshilong.service.chat.infrastructure.llm.core.LLMClientFactory;
+import com.songshilong.service.chat.infrastructure.llm.core.LLMConfig;
 import com.songshilong.service.chat.infrastructure.llm.message.Message;
 import com.songshilong.service.chat.interfaces.service.chat.ChatService;
 import com.songshilong.starter.database.util.MongoUtil;
 import lombok.RequiredArgsConstructor;
+import org.apache.ibatis.exceptions.TooManyResultsException;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @BelongsProject: chemical-platform-backend
@@ -33,6 +49,9 @@ public class ChatServiceImpl implements ChatService {
 
     private final MongoUtil mongoUtil;
     private final MongoClient mongo;
+    private final LLMApiSecretConfigurationMapper llmApiSecretConfigurationMapper;
+    private final LLMClientFactory llmClientFactory;
+    private final SnowflakeGenerator snowflakeGenerator;
 
     @Override
     public ConversationHistoryResponse queryConversationHistory(Long userId) {
@@ -90,6 +109,81 @@ public class ChatServiceImpl implements ChatService {
             throw new BusinessException(ChatExceptionEnum.DELETE_CONVERSATION_FAIL);
         }
         return Boolean.TRUE;
+    }
+
+    @Override
+    public Flux<String> chatStream(ChatCallRequest chatCallRequest) {
+        UserLLMConfigurationDTO llmConfiguration = this.loadUserLLMConfiguration(chatCallRequest);
+        ConversationRecordDTO conversationRecord = this.loadConversationHistory(chatCallRequest);
+        LLMConfig llmConfig = UserLLMConfigurationDTO.toLLMConfig(llmConfiguration);
+        LLMClient client = llmClientFactory.createClient(llmConfig);
+        List<Message> messages = this.buildMessages(chatCallRequest, conversationRecord);
+        return client.callStream(messages);
+    }
+
+    @Override
+    public Long createConversation(Long userId) {
+        List<Message> messages = Collections.emptyList();
+        Long conversationId = snowflakeGenerator.next();
+        ConversationRecord record = ConversationRecord.builder()
+                .id(conversationId)
+                .userId(userId)
+                .messages(messages)
+                .lastMessageTimestamp(System.currentTimeMillis())
+                .deleted(0)
+                .build();
+        ConversationRecord insert = this.mongoUtil.getInstance().insert(record);
+        if (Objects.isNull(insert)) {
+            throw new BusinessException(ChatExceptionEnum.CREATE_CONVERSATION_FAIL);
+        }
+        return conversationId;
+    }
+
+    /**
+     * 构建消息列表
+     */
+    private List<Message> buildMessages(ChatCallRequest chatCallRequest, ConversationRecordDTO conversationRecord) {
+        List<Message> messages = conversationRecord.getMessages();
+        if (CollectionUtil.isEmpty(messages)) {
+            return List.of(Message.ofUser(chatCallRequest.getUserQuestion()));
+        }
+        messages.add(Message.ofUser(chatCallRequest.getUserQuestion()));
+        return messages;
+    }
+
+    /**
+     * 加载用户当前激活的LLM配置
+     */
+    private UserLLMConfigurationDTO loadUserLLMConfiguration(ChatCallRequest chatCallRequest) {
+        LambdaQueryWrapper<LLMApiSecretConfigurationEntity> queryWrapper = Wrappers.lambdaQuery(LLMApiSecretConfigurationEntity.class)
+                .eq(LLMApiSecretConfigurationEntity::getUserId, chatCallRequest.getUserId())
+                .eq(LLMApiSecretConfigurationEntity::getConfigurationName, chatCallRequest.getConfigurationName());
+        LLMApiSecretConfigurationEntity configurationEntity = null;
+        try {
+            configurationEntity = this.llmApiSecretConfigurationMapper.selectOne(queryWrapper);
+        } catch (TooManyResultsException e) {
+            throw new BusinessException(ChatExceptionEnum.MULTIPLE_LLM_CONFIGURATION_FOUND);
+        }
+        if (Objects.isNull(configurationEntity)) {
+            throw new BusinessException(ChatExceptionEnum.CONFIGURATION_NOT_FOUND);
+        }
+        return UserLLMConfigurationDTO.fromEntity(configurationEntity);
+    }
+
+    /**
+     * 加载当前对话历史记录
+     */
+    private ConversationRecordDTO loadConversationHistory(ChatCallRequest chatCallRequest) {
+        Query query = Query.query(
+                Criteria.where(ConversationRecord.USER_ID).is(chatCallRequest.getUserId())
+                        .and(ConversationRecord.ID).is(chatCallRequest.getConversationId())
+                        .and(ConversationRecord.DELETED).is(0)
+        );
+        ConversationRecord conversationRecord = mongoUtil.getInstance().findOne(query, ConversationRecord.class);
+        if (conversationRecord == null) {
+            throw new BusinessException(ChatExceptionEnum.CONVERSATION_NOT_FOUND);
+        }
+        return ConversationRecordDTO.fromEntity(conversationRecord);
     }
 
 

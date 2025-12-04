@@ -2,6 +2,7 @@ package com.songshilong.service.chat.application.controller;
 
 import com.songshilong.module.starter.common.result.Result;
 import com.songshilong.service.chat.domain.chat.req.AddMessageRequest;
+import com.songshilong.service.chat.domain.chat.req.ChatCallRequest;
 import com.songshilong.service.chat.domain.chat.res.ConversationHistoryResponse;
 import com.songshilong.service.chat.domain.chat.vo.ConversationDetailView;
 import com.songshilong.service.chat.interfaces.service.chat.ChatService;
@@ -9,8 +10,10 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
 
 /**
  * @BelongsProject: chemical-platform-backend
@@ -28,6 +31,12 @@ public class ChatController {
 
     private final ChatService chatService;
 
+
+    @PostMapping(value = "/call/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    @ApiOperation("调用LLM接口-流式响应")
+    public Flux<String> chatStream(@RequestBody @Validated ChatCallRequest chatCallRequest) {
+        return chatService.chatStream(chatCallRequest);
+    }
 
     @GetMapping("conversation/{userId}/history")
     @ApiOperation("查询所属用户的历史对话记录")
@@ -58,6 +67,16 @@ public class ChatController {
     ) {
         Boolean res = chatService.addMessageToConversation(userId, conversationId, addMessageRequest);
         return Result.success(res);
+    }
+
+    @PostMapping("conversation/{userId}/create")
+    @ApiOperation("创建新的会话记录")
+    public Result<Long> createConversation(
+            @ApiParam("用户ID")
+            @PathVariable("userId") Long userId
+    ) {
+        Long conversationId = chatService.createConversation(userId);
+        return Result.success(conversationId);
     }
 
     @DeleteMapping("conversation/{userId}/{conversationId}")

@@ -9,7 +9,6 @@ import com.songshilong.service.chat.domain.secrect.res.LLMApiSecretConfiguration
 import com.songshilong.service.chat.interfaces.service.secrect.LLMApiSecretService;
 import com.songshilong.starter.database.base.PageResult;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +16,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Queue;
 
 /**
  * @BelongsProject: chemical-platform-backend
