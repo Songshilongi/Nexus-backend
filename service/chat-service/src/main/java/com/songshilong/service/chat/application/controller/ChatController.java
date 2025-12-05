@@ -13,7 +13,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import reactor.core.publisher.Flux;
+
+import java.util.List;
 
 /**
  * @BelongsProject: chemical-platform-backend
@@ -89,6 +92,21 @@ public class ChatController {
     ) {
         Boolean res = chatService.deleteConversation(userId, conversationId);
         return Result.success(res);
+    }
+
+
+    @PostMapping("image/upload-batch/")
+    @ApiOperation("上传图片-批量")
+    public Result<List<String>> uploadImage(@RequestPart("files") List<MultipartFile> files) {
+        List<String> urls = chatService.uploadImageBatch(files);
+        return Result.success(urls);
+    }
+
+    @PostMapping("image/upload-single/")
+    @ApiOperation("上传图片-单个")
+    public Result<String> uploadImage(@RequestPart("file") MultipartFile file) {
+        String url = chatService.uploadImage(file);
+        return Result.success(url);
     }
 
 }

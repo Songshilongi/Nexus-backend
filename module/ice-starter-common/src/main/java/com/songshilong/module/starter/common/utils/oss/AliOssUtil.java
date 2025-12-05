@@ -1,12 +1,13 @@
 package com.songshilong.module.starter.common.utils.oss;
 
-import com.aliyun.oss.ClientBuilderConfiguration;
-import com.aliyun.oss.OSS;
-import com.aliyun.oss.OSSClientBuilder;
+import com.aliyun.oss.*;
 import com.aliyun.oss.common.auth.CredentialsProviderFactory;
 import com.aliyun.oss.common.auth.DefaultCredentialProvider;
 import com.aliyun.oss.common.comm.SignVersion;
 import lombok.RequiredArgsConstructor;
+
+import java.io.InputStream;
+import java.util.Objects;
 
 /**
  * @BelongsProject: chemical-platform-backend
@@ -20,6 +21,9 @@ import lombok.RequiredArgsConstructor;
 public class AliOssUtil {
 
     private final AliYunOssProperty aliYunOssProperty;
+
+
+    private static final String HTTPS = "https://";
 
     /**
      * 构建阿里云OSS客户端
@@ -39,5 +43,29 @@ public class AliOssUtil {
                 .credentialsProvider(defaultCredentialProvider)
                 .region(aliYunOssProperty.getRegion())
                 .build();
+    }
+
+    /**
+     * 上传单个文件
+     *
+     * @param inputStream 文件资源
+     * @param path        目标完整路径 /xx/yy/resource.xxx
+     * @return 完整的请求路径
+     */
+    public String uploadFile(InputStream inputStream, String path) {
+        OSS ossClient = null;
+        String url = null;
+        try {
+            ossClient = this.buildClient();
+            ossClient.putObject(aliYunOssProperty.getBucketName(), path, inputStream);
+            url = HTTPS + aliYunOssProperty.getBucketName() + "." + aliYunOssProperty.getEndpoint() + "/" + path;
+        } catch (OSSException | ClientException e) {
+            throw new RuntimeException("文件上传失败");
+        } finally {
+            if (!Objects.isNull(ossClient)) {
+                ossClient.shutdown();
+            }
+        }
+        return url;
     }
 }

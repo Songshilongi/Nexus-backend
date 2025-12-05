@@ -4,7 +4,10 @@ import com.songshilong.service.chat.domain.chat.req.AddMessageRequest;
 import com.songshilong.service.chat.domain.chat.req.ChatCallRequest;
 import com.songshilong.service.chat.domain.chat.res.ConversationHistoryResponse;
 import com.songshilong.service.chat.domain.chat.vo.ConversationDetailView;
+import org.springframework.web.multipart.MultipartFile;
 import reactor.core.publisher.Flux;
+
+import java.util.List;
 
 /**
  * @BelongsProject: chemical-platform-backend
@@ -60,4 +63,19 @@ public interface ChatService {
      * @return 新创建的会话ID
      */
     Long createConversation(Long userId);
+
+
+    /**
+     * 批量上传图片
+     * @param files 文件
+     * @return 下载地址列表
+     */
+    List<String> uploadImageBatch(List<MultipartFile> files);
+
+    /**
+     * 上传图片单张
+     * @param file 文件
+     * @return 下载地址
+     */
+    String uploadImage(MultipartFile file);
 }

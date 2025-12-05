@@ -8,6 +8,7 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.result.UpdateResult;
 import com.songshilong.module.starter.common.exception.BusinessException;
 import com.songshilong.module.starter.common.exception.enums.ChatExceptionEnum;
+import com.songshilong.module.starter.common.utils.oss.AliOssUtil;
 import com.songshilong.service.chat.domain.chat.dao.entity.ConversationRecord;
 import com.songshilong.service.chat.domain.chat.dto.ConversationRecordDTO;
 import com.songshilong.service.chat.domain.chat.dto.UserLLMConfigurationDTO;
@@ -29,8 +30,11 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import reactor.core.publisher.Flux;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -52,6 +56,9 @@ public class ChatServiceImpl implements ChatService {
     private final LLMApiSecretConfigurationMapper llmApiSecretConfigurationMapper;
     private final LLMClientFactory llmClientFactory;
     private final SnowflakeGenerator snowflakeGenerator;
+    private final AliOssUtil aliOssUtil;
+
+    private static final String IMAGE_FOLDER = "chat/images/";
 
     @Override
     public ConversationHistoryResponse queryConversationHistory(Long userId) {
@@ -137,6 +144,28 @@ public class ChatServiceImpl implements ChatService {
             throw new BusinessException(ChatExceptionEnum.CREATE_CONVERSATION_FAIL);
         }
         return conversationId;
+    }
+
+    @Override
+    public List<String> uploadImageBatch(List<MultipartFile> files) {
+        List<String> urls = new ArrayList<>();
+        for (MultipartFile file : files) {
+            String url = this.uploadImage(file);
+            urls.add(url);
+        }
+        return urls;
+    }
+
+    @Override
+    public String uploadImage(MultipartFile file) {
+        String path = IMAGE_FOLDER + snowflakeGenerator.next() + "_" + file.getOriginalFilename();
+        String url = null;
+        try {
+            url = aliOssUtil.uploadFile(file.getInputStream(), path);
+        } catch (IOException e) {
+            throw new BusinessException(ChatExceptionEnum.UPLOAD_FAIL);
+        }
+        return url;
     }
 
     /**

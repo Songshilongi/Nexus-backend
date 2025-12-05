@@ -17,6 +17,7 @@ public enum ChatExceptionEnum implements ExceptionHandler {
     MULTIPLE_LLM_CONFIGURATION_FOUND(60004, "加载用户LLM配置失败，存在多个同名配置"),
     CONFIGURATION_NOT_FOUND(60005, "自定义配置未找到"),
     CREATE_CONVERSATION_FAIL(60006, "创建对话失败"),
+    UPLOAD_FAIL(60007, "文件上传失败"),
     ;
 
 
