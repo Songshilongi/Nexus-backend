@@ -6,6 +6,8 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * @BelongsProject: chemical-platform-backend
  * @BelongsPackage: com.songshilong.service.chat.domain.chat.req
@@ -34,6 +36,9 @@ public class ChatCallRequest {
     @NotEmpty
     @ApiModelProperty("用户提问内容")
     private String userQuestion;
+
+    @ApiModelProperty
+    private List<String> imageUrls;
 
 
 }

@@ -58,7 +58,7 @@ public class TestConnection {
         Long chatId = snowflakeGenerator.next();
         ConversationRecord record = ConversationRecord.builder()
                 .id(chatId)
-                .userId(1L)
+                .userId(999L)
                 .messages(messages)
                 .lastMessageTimestamp(System.currentTimeMillis())
                 .deleted(0)
@@ -83,7 +83,7 @@ public class TestConnection {
         System.out.println(mongoUtil.getInstance().find(
                         Query.query(
                                 Criteria.where("user_id").is(userId)
-                                        .and("_id").is(1996200262057857024L)
+                                        .and("_id").is(1996826291755552768L)
                         ),
                         ConversationRecord.class
                 )

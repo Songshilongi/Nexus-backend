@@ -3,6 +3,7 @@ package com.songshilong.service.chat.domain.chat.res;
 import cn.hutool.core.collection.CollectionUtil;
 import com.songshilong.service.chat.domain.chat.dao.entity.ConversationRecord;
 import com.songshilong.service.chat.domain.chat.vo.ConversationHistoryView;
+import com.songshilong.service.chat.infrastructure.llm.message.Content;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -33,10 +34,12 @@ public class ConversationHistoryResponse {
                 .map(record -> {
                     ConversationHistoryView dto = new ConversationHistoryView();
                     dto.setConversationId(record.getId());
+                    dto.setSummary("空白对话");
                     if (CollectionUtil.isNotEmpty(record.getMessages()) && record.getMessages().size() > 1) {
-                        dto.setSummary(record.getMessages().getFirst().content());
-                    } else {
-                        dto.setSummary("空白对话");
+                        List<Content> contents = record.getMessages().getFirst().getContents();
+                        contents.stream()
+                                .filter(content -> content.getType().equals("text"))
+                                .findFirst().ifPresent(text -> dto.setSummary(text.getText()));
                     }
                     return dto;
                 }).toList().reversed();

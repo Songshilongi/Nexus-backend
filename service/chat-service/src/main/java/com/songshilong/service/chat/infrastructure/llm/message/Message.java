@@ -1,5 +1,11 @@
 package com.songshilong.service.chat.infrastructure.llm.message;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import org.springframework.data.mongodb.core.mapping.Field;
+
+import java.util.List;
+
 /**
  * @BelongsProject: chemical-platform-backend
  * @BelongsPackage: com.songshilong.service.chat.infrastructure.llm.message
@@ -8,19 +14,23 @@ package com.songshilong.service.chat.infrastructure.llm.message;
  * @Description: Message 构造类
  * @Version: 1.0
  */
-public record Message(String role, String content) {
+@Data
+@AllArgsConstructor
+public class Message {
+
+    @Field("role")
+    private String role;
+    @Field("contents")
+    private List<Content> contents;
 
     public static Message ofUser(String content) {
-        return messageBuilder(MessageRoleEnum.USER, content);
+        Content text = Content.ofText(content);
+        return new Message(MessageRoleEnum.USER.getRole(), List.of(text));
     }
-
-    public static Message ofSystem(String content) {
-        return messageBuilder(MessageRoleEnum.SYSTEM, content);
-    }
-
 
     public static Message ofAssistant(String content) {
-        return messageBuilder(MessageRoleEnum.ASSISTANT, content);
+        Content text = Content.ofText(content);
+        return new Message(MessageRoleEnum.ASSISTANT.getRole(), List.of(text));
     }
 
     public static Message of(String role, String content) {
@@ -28,11 +38,8 @@ public record Message(String role, String content) {
         if (roleEnum == null) {
             throw new IllegalArgumentException("Unsupported message role: " + role);
         }
-        return messageBuilder(roleEnum, content);
+        Content text = Content.ofText(content);
+        return new Message(roleEnum.getRole(), List.of(text));
     }
 
-    private static Message messageBuilder(MessageRoleEnum roleEnum, String content) {
-        return new Message(roleEnum.getRole(), content);
-
-    }
 }

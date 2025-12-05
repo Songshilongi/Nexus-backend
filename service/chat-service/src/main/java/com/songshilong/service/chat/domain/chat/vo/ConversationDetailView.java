@@ -23,13 +23,24 @@ public class ConversationDetailView {
     private Long conversationId;
 
     @ApiModelProperty("消息列表")
-    private List<Message> messages;
+    private List<MessageView> messages;
 
 
     public static ConversationDetailView fromRecord(ConversationRecord record) {
         ConversationDetailView view = new ConversationDetailView();
         view.setConversationId(record.getId());
-        view.setMessages(record.getMessages());
+        List<Message> messageList = record.getMessages();
+        List<MessageView> list = messageList.stream()
+                .map(message -> {
+                    MessageView messageView = new MessageView();
+                    messageView.setRole(message.getRole());
+                    message.getContents().stream()
+                            .filter(content -> content.getType().equals("text"))
+                            .findFirst()
+                            .ifPresent(textContent -> messageView.setContent(textContent.getText()));
+                    return messageView;
+                }).toList();
+        view.setMessages(list);
         return view;
     }
 }

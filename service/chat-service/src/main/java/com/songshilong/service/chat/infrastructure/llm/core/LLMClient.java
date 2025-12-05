@@ -1,11 +1,13 @@
 package com.songshilong.service.chat.infrastructure.llm.core;
 
 import com.songshilong.service.chat.infrastructure.llm.core.req.ChatRequest;
+import com.songshilong.service.chat.infrastructure.llm.message.Content;
 import com.songshilong.service.chat.infrastructure.llm.message.Message;
 import com.songshilong.service.chat.infrastructure.utils.HttpUtils;
 import lombok.Getter;
 import reactor.core.publisher.Flux;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +22,7 @@ import java.util.Map;
  */
 
 @Getter
-public class LLMClient implements LLMInteraction{
+public class LLMClient implements LLMInteraction {
 
 
     private final LLMConfig llmConfig;
@@ -50,9 +52,9 @@ public class LLMClient implements LLMInteraction{
     }
 
     @Override
-    public Flux<String> callStream(List<Message> messages) {
+    public Flux<String> callStream(List<Message> messages, boolean enable_image) {
         String baseUrl = llmConfig.baseUrl();
-        Map<String, Object> body = this.buildRequestPayload(messages);
+        Map<String, Object> body = this.buildRequestPayload(messages, enable_image);
         Map<String, String> headers = this.buildRequestHeaders();
         return httpUtils.postForStream(baseUrl, body, headers);
     }
@@ -63,11 +65,26 @@ public class LLMClient implements LLMInteraction{
         return headers;
     }
 
-    private Map<String, Object> buildRequestPayload(List<Message> messages) {
+    private Map<String, Object> buildRequestPayload(List<Message> messages, boolean enable_image) {
         Map<String, Object> body = new HashMap<>();
         body.put("model", llmConfig.modelId());
         body.put("temperature", llmConfig.temperature());
-        body.put("messages", messages);
+        if (enable_image) {
+            body.put("messages", messages);
+        } else {
+            List<Map<String, String>> data = new ArrayList<>();
+            for (Message message : messages) {
+                Map<String, String> map = new HashMap<>();
+                List<Content> contents = message.getContents();
+                contents.stream()
+                        .filter(content -> content.getType().equals("text"))
+                        .findFirst()
+                        .ifPresent(text -> map.put("content", text.getText()));
+                map.put("role", message.getRole());
+                data.add(map);
+            }
+            body.put("messages", data);
+        }
         body.put("stream", true);
         return body;
     }

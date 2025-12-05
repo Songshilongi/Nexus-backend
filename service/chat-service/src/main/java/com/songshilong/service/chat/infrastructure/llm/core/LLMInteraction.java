@@ -45,7 +45,7 @@ public interface LLMInteraction {
      * @param messages 消息列表
      * @return LLM响应内容流
      */
-    Flux<String> callStream(List<Message> messages);
+    Flux<String> callStream(List<Message> messages, boolean enable_image);
 
 
 }

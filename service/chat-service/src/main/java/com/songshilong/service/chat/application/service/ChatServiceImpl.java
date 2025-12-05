@@ -125,7 +125,7 @@ public class ChatServiceImpl implements ChatService {
         LLMConfig llmConfig = UserLLMConfigurationDTO.toLLMConfig(llmConfiguration);
         LLMClient client = llmClientFactory.createClient(llmConfig);
         List<Message> messages = this.buildMessages(chatCallRequest, conversationRecord);
-        return client.callStream(messages);
+        return client.callStream(messages, false);
     }
 
     @Override
