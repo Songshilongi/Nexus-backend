@@ -3,6 +3,7 @@ package com.songshilong.service.chat;
 import cn.hutool.core.lang.generator.SnowflakeGenerator;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.result.UpdateResult;
+import com.songshilong.module.starter.common.utils.oss.AliYunOssProperty;
 import com.songshilong.service.chat.domain.chat.dao.entity.ConversationRecord;
 import com.songshilong.service.chat.infrastructure.llm.message.Message;
 import com.songshilong.starter.database.util.MongoUtil;
@@ -31,13 +32,20 @@ public class TestConnection {
 
     @Autowired
     MongoUtil mongoUtil;
+
+
     @Autowired
-    private MongoClient mongo;
+    AliYunOssProperty aliYunOssProperty;
 
     @Test
     public void gen() {
         long id = snowflakeGenerator.next();
         System.out.println("Generated ID: " + id);
+    }
+
+    @Test
+    public void testOss() {
+        System.out.println(aliYunOssProperty);
     }
 
 

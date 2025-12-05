@@ -60,5 +60,15 @@ mybatis-plus:
       logic-delete-field: deleted
       logic-delete-value: 1
       logic-not-delete-value: 0
-
+chemical:
+  property:
+    snow:
+      worker-id: 1
+      datacenter-id: 0
+    oss:
+      endpoint: *
+      key-id: *
+      key-secret: *
+      bucket-name: *
+      region: *
 ```
