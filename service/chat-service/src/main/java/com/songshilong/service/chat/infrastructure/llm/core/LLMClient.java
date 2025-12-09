@@ -5,6 +5,7 @@ import com.songshilong.service.chat.infrastructure.llm.message.Content;
 import com.songshilong.service.chat.infrastructure.llm.message.Message;
 import com.songshilong.service.chat.infrastructure.utils.HttpUtils;
 import lombok.Getter;
+import org.springframework.http.HttpHeaders;
 import reactor.core.publisher.Flux;
 
 import java.util.ArrayList;
@@ -27,6 +28,13 @@ public class LLMClient implements LLMInteraction {
 
     private final LLMConfig llmConfig;
     private final HttpUtils httpUtils;
+
+    private static final String MODEL = "model";
+    private static final String MESSAGES = "messages";
+    private static final String TEMPERATURE = "temperature";
+    private static final String ROLE = "role";
+    private static final String CONTENT = "content";
+    private static final String TEXT = "text";
 
     public LLMClient(LLMConfig llmConfig, HttpUtils httpUtils) {
         this.llmConfig = llmConfig;
@@ -61,29 +69,29 @@ public class LLMClient implements LLMInteraction {
 
     private Map<String, String> buildRequestHeaders() {
         Map<String, String> headers = new HashMap<>();
-        headers.put("Authorization", "Bearer " + llmConfig.apiKey());
+        headers.put(HttpHeaders.AUTHORIZATION, "Bearer " + llmConfig.apiKey());
         return headers;
     }
 
     private Map<String, Object> buildRequestPayload(List<Message> messages, boolean enable_image) {
         Map<String, Object> body = new HashMap<>();
-        body.put("model", llmConfig.modelId());
-        body.put("temperature", llmConfig.temperature());
+        body.put(MODEL, llmConfig.modelId());
+        body.put(TEMPERATURE, llmConfig.temperature());
         if (enable_image) {
-            body.put("messages", messages);
+            body.put(MESSAGES, messages);
         } else {
             List<Map<String, String>> data = new ArrayList<>();
             for (Message message : messages) {
                 Map<String, String> map = new HashMap<>();
                 List<Content> contents = message.getContents();
                 contents.stream()
-                        .filter(content -> content.getType().equals("text"))
+                        .filter(content -> content.getType().equals(TEXT))
                         .findFirst()
-                        .ifPresent(text -> map.put("content", text.getText()));
-                map.put("role", message.getRole());
+                        .ifPresent(text -> map.put(CONTENT, text.getText()));
+                map.put(ROLE, message.getRole());
                 data.add(map);
             }
-            body.put("messages", data);
+            body.put(MESSAGES, data);
         }
         body.put("stream", true);
         return body;
