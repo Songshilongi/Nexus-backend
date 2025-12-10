@@ -39,6 +39,10 @@ public class BeanUtil {
 
     }
 
+    public static ObjectMapper getMapper() {
+        return MAPPER;
+    }
+
 
     /**
      * 创建目标对象，并将原对象的值拷贝到新的目标对象上。
@@ -61,11 +65,11 @@ public class BeanUtil {
     }
 
     /**
-     * 将对象转换为JSON字符串
+     * 将对象转换为 JSON 字符串
      *
      * @param obj 对象
      * @param <T> 对象类型
-     * @return JSON字符串
+     * @return JSON 字符串
      */
     public static <T> String toJSON(T obj) {
         if (Objects.isNull(obj)) {
@@ -81,7 +85,7 @@ public class BeanUtil {
     }
 
     /**
-     * 将JSON字符串转换为对象
+     * 将 JSON 字符串转换为对象
      *
      * @param json  JSON String
      * @param clazz 目标对象类型
