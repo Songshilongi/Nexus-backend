@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -27,7 +28,8 @@ public class TestAgent {
 
     @Test
     public void testInit() {
-        Map<String, ToolExecutor> toolsForSession = agentToolManager.getToolsForSession(Collections.emptyList());
+        List<String> urls = List.of("http://localhost:8081/mcp");
+        Map<String, ToolExecutor> toolsForSession = agentToolManager.getToolsForSession(urls);
         toolsForSession.forEach((name, executor) -> {
             System.out.println("Tool Name: " + name);
             System.out.println("Tool Definition: ");
@@ -35,5 +37,10 @@ public class TestAgent {
             Object execute = executor.execute(null);
             System.out.println("Tool Execution Result: " + execute);
         });
+
+        System.out.println("---- Execute current_time tool ----");
+        System.out.println(this.agentToolManager.execute("current_time", Collections.emptyMap()));
+
+        System.out.println(this.agentToolManager.execute("calculate_sqrt", Map.of("number", 16)));
     }
 }

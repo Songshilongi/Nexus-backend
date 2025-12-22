@@ -27,17 +27,17 @@ public class LLMApiSecretConfigurationEntity extends BaseEntity {
     private Long id;
 
     /**
-     * 用户ID
+     * 用户 ID
      */
     private Long userId;
 
     /**
-     * 用户自定义LLM配置的名字
+     * 用户自定义 LLM 配置的名字
      */
     private String configurationName;
 
     /**
-     * API密钥
+     * API 密钥
      */
     private String apiKey;
 

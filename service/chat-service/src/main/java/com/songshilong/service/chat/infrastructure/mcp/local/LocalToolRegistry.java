@@ -6,6 +6,7 @@ import com.songshilong.module.starter.common.exception.enums.AgentExceptionEnum;
 import com.songshilong.module.starter.common.utils.BeanUtil;
 import com.songshilong.service.chat.infrastructure.mcp.core.SchemaHelper;
 import com.songshilong.service.chat.infrastructure.mcp.core.ToolExecutor;
+import com.songshilong.service.chat.infrastructure.mcp.core.ToolSourceEnum;
 import com.songshilong.service.chat.infrastructure.mcp.model.McpTool;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.aop.support.AopUtils;
@@ -113,6 +114,11 @@ public class LocalToolRegistry implements ApplicationListener<ApplicationReadyEv
             } catch (Exception e) {
                 throw new ServiceException(AgentExceptionEnum.LOCAL_TOOL_EXECUTE_FAIL);
             }
+        }
+
+        @Override
+        public String getSourceType() {
+            return ToolSourceEnum.LOCAL.getSource();
         }
     }
 }
