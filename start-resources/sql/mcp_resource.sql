@@ -14,5 +14,6 @@ CREATE TABLE `mcp_resource`
     `deleted`       tinyint(4) NOT NULL DEFAULT '0' COMMENT '删除标志 (0:正常 1:删除)',
 
     PRIMARY KEY (`id`),
+    UNIQUE KEY `uk_resource_name` (`resource_name`),
     KEY             `idx_user_id` (`user_id`) COMMENT '用户ID普通索引'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='MCP资源表';
