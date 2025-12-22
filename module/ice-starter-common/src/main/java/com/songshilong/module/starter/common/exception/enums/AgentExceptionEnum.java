@@ -16,6 +16,7 @@ public enum AgentExceptionEnum implements ExceptionHandler {
     LOCAL_TOOL_EXECUTE_FAIL(70003, "本地工具执行失败"),
     REMOTE_TOOL_EXECUTE_FAIL(70004, "远程工具执行失败"),
     MCP_SERVER_ERROR(70005, "MCP 服务器异常"),
+    EMPTY_TOOL_NAME(70006, "工具名称为空"),
     ;
 
     private final Integer errorCode;

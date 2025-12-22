@@ -29,4 +29,12 @@ public interface ToolExecutor {
      * @return 结果
      */
     Object execute(Map<String, Object> args);
+
+
+    /**
+     * 获取工具的来源 - 本地还是远程
+     * @return LOCAL or REMOTE
+     */
+    String getSourceType();
+
 }

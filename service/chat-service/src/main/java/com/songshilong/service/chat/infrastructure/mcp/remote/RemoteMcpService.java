@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.songshilong.module.starter.common.exception.ServiceException;
 import com.songshilong.module.starter.common.exception.enums.AgentExceptionEnum;
 import com.songshilong.service.chat.infrastructure.mcp.core.ToolExecutor;
+import com.songshilong.service.chat.infrastructure.mcp.core.ToolSourceEnum;
 import com.songshilong.service.chat.infrastructure.mcp.model.CallToolParams;
 import com.songshilong.service.chat.infrastructure.mcp.model.JsonRpcMessage;
 import com.songshilong.service.chat.infrastructure.mcp.model.ListToolsResult;
@@ -78,6 +79,11 @@ public class RemoteMcpService {
             } catch (Exception e) {
                 throw new ServiceException(AgentExceptionEnum.REMOTE_TOOL_EXECUTE_FAIL);
             }
+        }
+
+        @Override
+        public String getSourceType() {
+            return ToolSourceEnum.REMOTE.getSource();
         }
     }
 }
