@@ -7,16 +7,6 @@ import org.redisson.api.RedissonClient;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-/**
- * @BelongsProject: chemical-platform-backend
- * @BelongsPackage: com.songshilong.service.user.config
- * @Author: Ice, Song
- * @CreateTime: 2025-11-27  11:15
- * @Description: UserServiceConfiguration
- * @Version: 1.0
- */
-import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 

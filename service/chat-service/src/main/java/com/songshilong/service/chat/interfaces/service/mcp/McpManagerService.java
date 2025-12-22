@@ -3,7 +3,6 @@ package com.songshilong.service.chat.interfaces.service.mcp;
 import com.songshilong.service.chat.domain.mcp.req.McpResourceRequest;
 import com.songshilong.service.chat.domain.mcp.req.NewMcpResourceRequest;
 import com.songshilong.service.chat.domain.mcp.res.McpResourceResponse;
-import com.songshilong.service.chat.domain.secrect.res.LLMApiSecretConfigurationResponse;
 import com.songshilong.starter.database.base.PageResult;
 
 /**

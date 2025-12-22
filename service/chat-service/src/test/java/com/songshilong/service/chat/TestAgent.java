@@ -1,9 +1,7 @@
 package com.songshilong.service.chat;
 
-import com.songshilong.module.starter.common.utils.BeanUtil;
 import com.songshilong.service.chat.infrastructure.mcp.AgentToolManager;
 import com.songshilong.service.chat.infrastructure.mcp.core.ToolExecutor;
-import com.songshilong.service.chat.infrastructure.mcp.local.AgentTool;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

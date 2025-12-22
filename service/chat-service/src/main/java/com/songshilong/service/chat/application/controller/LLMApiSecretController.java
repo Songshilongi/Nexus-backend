@@ -1,6 +1,5 @@
 package com.songshilong.service.chat.application.controller;
 
-import com.mysql.cj.QueryResult;
 import com.songshilong.module.starter.common.result.Result;
 import com.songshilong.service.chat.domain.secrect.req.CreateConfigurationRequest;
 import com.songshilong.service.chat.domain.secrect.req.QueryConfigurationRequest;

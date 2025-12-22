@@ -1,6 +1,5 @@
 package com.songshilong.service.chat.domain.chat.dao.entity;
 
-import com.songshilong.service.chat.domain.chat.res.ConversationHistoryResponse;
 import com.songshilong.service.chat.infrastructure.llm.message.Message;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

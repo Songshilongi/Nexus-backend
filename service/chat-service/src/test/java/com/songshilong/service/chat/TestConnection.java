@@ -1,7 +1,6 @@
 package com.songshilong.service.chat;
 
 import cn.hutool.core.lang.generator.SnowflakeGenerator;
-import com.mongodb.client.MongoClient;
 import com.mongodb.client.result.UpdateResult;
 import com.songshilong.module.starter.common.utils.oss.AliYunOssProperty;
 import com.songshilong.service.chat.domain.chat.dao.entity.ConversationRecord;
