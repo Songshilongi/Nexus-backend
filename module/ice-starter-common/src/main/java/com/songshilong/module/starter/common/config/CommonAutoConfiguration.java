@@ -1,8 +1,6 @@
 package com.songshilong.module.starter.common.config;
 
-import com.songshilong.module.starter.common.properties.UserJwtProperty;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
-import org.springframework.context.annotation.Bean;
 
 /**
  * @BelongsProject: chemical-platform-backend
