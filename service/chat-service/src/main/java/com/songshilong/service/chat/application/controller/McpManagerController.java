@@ -39,7 +39,7 @@ public class McpManagerController {
     }
 
 
-    @GetMapping("/{userId}/resources")
+    @PostMapping("/{userId}/resources")
     @ApiOperation("添加 MCP 资源")
     public Result<Boolean> addMcpResource(@PathVariable Long userId, @RequestBody @Validated NewMcpResourceRequest request) {
         Boolean result = this.mcpManagerService.addMcpResource(userId, request);
