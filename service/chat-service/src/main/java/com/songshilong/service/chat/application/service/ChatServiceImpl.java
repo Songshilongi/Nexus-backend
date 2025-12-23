@@ -16,12 +16,17 @@ import com.songshilong.service.chat.domain.chat.req.AddMessageRequest;
 import com.songshilong.service.chat.domain.chat.req.ChatCallRequest;
 import com.songshilong.service.chat.domain.chat.res.ConversationHistoryResponse;
 import com.songshilong.service.chat.domain.chat.vo.ConversationDetailView;
+import com.songshilong.service.chat.domain.mcp.dao.entity.McpResourceEntity;
+import com.songshilong.service.chat.domain.mcp.dao.mapper.McpResourceMapper;
 import com.songshilong.service.chat.domain.secrect.dao.entity.LLMApiSecretConfigurationEntity;
 import com.songshilong.service.chat.domain.secrect.dao.mapper.LLMApiSecretConfigurationMapper;
+import com.songshilong.service.chat.infrastructure.agent.McpAgent;
 import com.songshilong.service.chat.infrastructure.llm.core.LLMClient;
 import com.songshilong.service.chat.infrastructure.llm.core.LLMClientFactory;
 import com.songshilong.service.chat.infrastructure.llm.core.LLMConfig;
 import com.songshilong.service.chat.infrastructure.llm.message.Message;
+import com.songshilong.service.chat.infrastructure.mcp.AgentToolManager;
+import com.songshilong.service.chat.infrastructure.mcp.core.ToolExecutor;
 import com.songshilong.service.chat.interfaces.service.chat.ChatService;
 import com.songshilong.starter.database.util.MongoUtil;
 import lombok.RequiredArgsConstructor;
@@ -34,10 +39,7 @@ import org.springframework.web.multipart.MultipartFile;
 import reactor.core.publisher.Flux;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * @BelongsProject: chemical-platform-backend
@@ -57,15 +59,14 @@ public class ChatServiceImpl implements ChatService {
     private final LLMClientFactory llmClientFactory;
     private final SnowflakeGenerator snowflakeGenerator;
     private final AliOssUtil aliOssUtil;
+    private final AgentToolManager agentToolManager;
+    private final McpResourceMapper mcpResourceMapper;
 
     private static final String IMAGE_FOLDER = "chat/images/";
 
     @Override
     public ConversationHistoryResponse queryConversationHistory(Long userId) {
-        Query query = Query.query(
-                Criteria.where(ConversationRecord.USER_ID).is(userId)
-                        .and(ConversationRecord.DELETED).is(0)
-        );
+        Query query = Query.query(Criteria.where(ConversationRecord.USER_ID).is(userId).and(ConversationRecord.DELETED).is(0));
         List<ConversationRecord> conversationRecords = mongoUtil.getInstance().find(query, ConversationRecord.class);
         return ConversationHistoryResponse.fromConversationRecord(conversationRecords);
     }
@@ -73,10 +74,7 @@ public class ChatServiceImpl implements ChatService {
     @Override
     public Boolean addMessageToConversation(Long userId, Long conversationId, AddMessageRequest addMessageRequest) {
         Message message = AddMessageRequest.toMessage(addMessageRequest);
-        Criteria criteria = Criteria
-                .where(ConversationRecord.ID).is(conversationId)
-                .and(ConversationRecord.USER_ID).is(userId)
-                .and(ConversationRecord.DELETED).is(0);
+        Criteria criteria = Criteria.where(ConversationRecord.ID).is(conversationId).and(ConversationRecord.USER_ID).is(userId).and(ConversationRecord.DELETED).is(0);
         Query query = Query.query(criteria);
         Update update = new Update();
         update.push(ConversationRecord.MESSAGES, message);
@@ -90,11 +88,7 @@ public class ChatServiceImpl implements ChatService {
 
     @Override
     public ConversationDetailView queryConversationDetail(Long userId, Long conversationId) {
-        Query query = Query.query(
-                Criteria.where(ConversationRecord.USER_ID).is(userId)
-                        .and(ConversationRecord.ID).is(conversationId)
-                        .and(ConversationRecord.DELETED).is(0)
-        );
+        Query query = Query.query(Criteria.where(ConversationRecord.USER_ID).is(userId).and(ConversationRecord.ID).is(conversationId).and(ConversationRecord.DELETED).is(0));
         ConversationRecord record = mongoUtil.getInstance().findOne(query, ConversationRecord.class);
         if (record == null) {
             throw new BusinessException(ChatExceptionEnum.CONVERSATION_NOT_FOUND);
@@ -104,11 +98,7 @@ public class ChatServiceImpl implements ChatService {
 
     @Override
     public Boolean deleteConversation(Long userId, Long conversationId) {
-        Query query = Query.query(
-                Criteria.where(ConversationRecord.USER_ID).is(userId)
-                        .and(ConversationRecord.ID).is(conversationId)
-                        .and(ConversationRecord.DELETED).is(0)
-        );
+        Query query = Query.query(Criteria.where(ConversationRecord.USER_ID).is(userId).and(ConversationRecord.ID).is(conversationId).and(ConversationRecord.DELETED).is(0));
         Update update = new Update();
         update.set(ConversationRecord.DELETED, 1);
         UpdateResult updateResult = mongoUtil.getInstance().updateFirst(query, update, ConversationRecord.class);
@@ -122,23 +112,37 @@ public class ChatServiceImpl implements ChatService {
     public Flux<String> chatStream(ChatCallRequest chatCallRequest) {
         UserLLMConfigurationDTO llmConfiguration = this.loadUserLLMConfiguration(chatCallRequest);
         ConversationRecordDTO conversationRecord = this.loadConversationHistory(chatCallRequest);
+
         LLMConfig llmConfig = UserLLMConfigurationDTO.toLLMConfig(llmConfiguration);
         LLMClient client = llmClientFactory.createClient(llmConfig);
         List<Message> messages = this.buildMessages(chatCallRequest, conversationRecord);
-        return client.callStream(messages, false);
+        Boolean toolUseAllowed = Optional.ofNullable(chatCallRequest.getToolUseAllowed()).orElse(Boolean.FALSE);
+        if (!toolUseAllowed) {
+            return client.callStream(messages, false);
+        }
+        Map<String, ToolExecutor> tools = this.agentToolManager.getToolsForSession(this.loadUserMcpUrls(chatCallRequest.getUserId()));
+        McpAgent mcpAgent = new McpAgent(client, this.agentToolManager);
+        return mcpAgent.run(messages, tools);
+    }
+
+
+    /**
+     * 加载用户配置的 MCP 资源
+     *
+     * @param userId 用户 ID
+     * @return MCP 资源 列表
+     */
+    private List<String> loadUserMcpUrls(Long userId) {
+        LambdaQueryWrapper<McpResourceEntity> wrapper = Wrappers.lambdaQuery(McpResourceEntity.class).eq(McpResourceEntity::getUserId, userId);
+
+        return this.mcpResourceMapper.selectList(wrapper).stream().map(McpResourceEntity::getEndpoint).toList();
     }
 
     @Override
     public Long createConversation(Long userId) {
         List<Message> messages = Collections.emptyList();
         Long conversationId = snowflakeGenerator.next();
-        ConversationRecord record = ConversationRecord.builder()
-                .id(conversationId)
-                .userId(userId)
-                .messages(messages)
-                .lastMessageTimestamp(System.currentTimeMillis())
-                .deleted(0)
-                .build();
+        ConversationRecord record = ConversationRecord.builder().id(conversationId).userId(userId).messages(messages).lastMessageTimestamp(System.currentTimeMillis()).deleted(0).build();
         ConversationRecord insert = this.mongoUtil.getInstance().insert(record);
         if (Objects.isNull(insert)) {
             throw new BusinessException(ChatExceptionEnum.CREATE_CONVERSATION_FAIL);
@@ -184,9 +188,7 @@ public class ChatServiceImpl implements ChatService {
      * 加载用户当前激活的LLM配置
      */
     private UserLLMConfigurationDTO loadUserLLMConfiguration(ChatCallRequest chatCallRequest) {
-        LambdaQueryWrapper<LLMApiSecretConfigurationEntity> queryWrapper = Wrappers.lambdaQuery(LLMApiSecretConfigurationEntity.class)
-                .eq(LLMApiSecretConfigurationEntity::getUserId, chatCallRequest.getUserId())
-                .eq(LLMApiSecretConfigurationEntity::getConfigurationName, chatCallRequest.getConfigurationName());
+        LambdaQueryWrapper<LLMApiSecretConfigurationEntity> queryWrapper = Wrappers.lambdaQuery(LLMApiSecretConfigurationEntity.class).eq(LLMApiSecretConfigurationEntity::getUserId, chatCallRequest.getUserId()).eq(LLMApiSecretConfigurationEntity::getConfigurationName, chatCallRequest.getConfigurationName());
         LLMApiSecretConfigurationEntity configurationEntity = null;
         try {
             configurationEntity = this.llmApiSecretConfigurationMapper.selectOne(queryWrapper);
@@ -203,11 +205,7 @@ public class ChatServiceImpl implements ChatService {
      * 加载当前对话历史记录
      */
     private ConversationRecordDTO loadConversationHistory(ChatCallRequest chatCallRequest) {
-        Query query = Query.query(
-                Criteria.where(ConversationRecord.USER_ID).is(chatCallRequest.getUserId())
-                        .and(ConversationRecord.ID).is(chatCallRequest.getConversationId())
-                        .and(ConversationRecord.DELETED).is(0)
-        );
+        Query query = Query.query(Criteria.where(ConversationRecord.USER_ID).is(chatCallRequest.getUserId()).and(ConversationRecord.ID).is(chatCallRequest.getConversationId()).and(ConversationRecord.DELETED).is(0));
         ConversationRecord conversationRecord = mongoUtil.getInstance().findOne(query, ConversationRecord.class);
         if (conversationRecord == null) {
             throw new BusinessException(ChatExceptionEnum.CONVERSATION_NOT_FOUND);

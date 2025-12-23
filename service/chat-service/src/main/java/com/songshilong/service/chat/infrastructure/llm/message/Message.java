@@ -33,6 +33,11 @@ public class Message {
         return new Message(MessageRoleEnum.ASSISTANT.getRole(), List.of(text));
     }
 
+    public static Message ofSystem(String content) {
+        Content text = Content.ofText(content);
+        return new Message(MessageRoleEnum.SYSTEM.getRole(), List.of(text));
+    }
+
     public static Message of(String role, String content) {
         MessageRoleEnum roleEnum = MessageRoleEnum.of(role);
         if (roleEnum == null) {

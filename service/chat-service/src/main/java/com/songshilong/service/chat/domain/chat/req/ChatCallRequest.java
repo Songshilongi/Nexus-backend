@@ -37,8 +37,11 @@ public class ChatCallRequest {
     @ApiModelProperty("用户提问内容")
     private String userQuestion;
 
-    @ApiModelProperty
+    @ApiModelProperty("图片URL列表")
     private List<String> imageUrls;
+
+    @ApiModelProperty("是否允许使用工具")
+    private Boolean toolUseAllowed;
 
 
 }

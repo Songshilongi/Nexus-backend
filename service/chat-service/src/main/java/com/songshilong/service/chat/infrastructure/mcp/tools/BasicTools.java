@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @Component
 public class BasicTools {
 
-    @AgentTool(name = "current_time", description = "获取当前的时间，格式为YYYY-MM-DD HH:MM:SS")
+//    @AgentTool(name = "current_time", description = "获取当前的时间，格式为YYYY-MM-DD HH:MM:SS")
     public String currentTime() {
         return LocalDateTime.now().toString().replace('T', ' ');
     }
