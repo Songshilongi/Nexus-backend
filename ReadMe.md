@@ -22,14 +22,17 @@
 
 ---
 
-> [!NOTE]  
-> 
-> 1. This project is continuously being optimized and improved. Your valuable feedback and suggestions are highly welcome!
+> [!NOTE]
 >
-> 2. The project has been renamed from **"Chemical Platform Frontend"** to **"Nexus Frontend"**. Originally focused on my
-> Master's thesis research in chemical platforms, the project was renamed to better reflect its actual scope and
-> positioning, as the completed work now offers much broader applicability. This is also why the project artifacts and
-> code identifiers still refer to chemical-platform-backend.
+> 1. This project is continuously being optimized and improved. Your valuable feedback and suggestions are highly
+     welcome!
+>
+> 2. The project has been renamed from **"Chemical Platform Frontend"** to **"Nexus Frontend"**. Originally focused on
+     my
+     > Master's thesis research in chemical platforms, the project was renamed to better reflect its actual scope and
+     > positioning, as the completed work now offers much broader applicability. This is also why the project artifacts
+     and
+     > code identifiers still refer to chemical-platform-backend.
 
 > [!IMPORTANT]  
 > Frontend Repository: [Nexus Frontend](https://github.com/Songshilongi/Nexus-frontend)
