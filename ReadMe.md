@@ -22,6 +22,18 @@
 
 ---
 
+> [!NOTE]  
+> 
+> 1. This project is continuously being optimized and improved. Your valuable feedback and suggestions are highly welcome!
+>
+> 2. The project has been renamed from **"Chemical Platform Frontend"** to **"Nexus Frontend"**. Originally focused on my
+> Master's thesis research in chemical platforms, the project was renamed to better reflect its actual scope and
+> positioning, as the completed work now offers much broader applicability. This is also why the project artifacts and
+> code identifiers still refer to chemical-platform-backend.
+
+> [!IMPORTANT]  
+> Frontend Repository: [Nexus Frontend](https://github.com/Songshilongi/Nexus-frontend)
+
 ## ✨ Features
 
 Based on the interface design, Nexus Frontend provides:
@@ -42,11 +54,13 @@ Compatibility: [Refer to the Spring Cloud Version Mapping for the corresponding 
 1. **Local Agent Tool Registration**
 
    The project provides a custom
-   annotation, [`@AgentTool`](service/chat-service/src/main/java/com/songshilong/service/chat/infrastructure/mcp/local/AgentTool.java),
+   annotation, [
+   `@AgentTool`](service/chat-service/src/main/java/com/songshilong/service/chat/infrastructure/mcp/local/AgentTool.java),
    specifically designed to mark locally implemented Agent Tools.
 
    During application startup, the system leverages Spring Boot's event listening mechanism. The
-   class [`LocalToolRegistry`](service/chat-service/src/main/java/com/songshilong/service/chat/infrastructure/mcp/local/LocalToolRegistry.java)
+   class [
+   `LocalToolRegistry`](service/chat-service/src/main/java/com/songshilong/service/chat/infrastructure/mcp/local/LocalToolRegistry.java)
    implements the `ApplicationListener<ApplicationReadyEvent>` interface. Once the application is ready, it scans all
    registered Beans for methods annotated with `@AgentTool`. These instances are then registered with the MCP Tool
    Management
@@ -65,11 +79,15 @@ Compatibility: [Refer to the Spring Cloud Version Mapping for the corresponding 
    }
    ```
 
-2. Remote MCP Tool Registration  
+2. Remote MCP Tool Registration
 
-   Remote MCP tools are developed based on the Model Context Protocol (MCP). For more details, please refer to the [MCP Protocol Documentation](https://modelcontextprotocol.io/docs/learn/server-concepts).
-   The core implementation class, [`RemoteMcpService`](service/chat-service/src/main/java/com/songshilong/service/chat/infrastructure/mcp/remote/RemoteMcpService.java), handles the tool discovery and invocation processes based on the MCP protocol, using the MCP endpoint addresses provided by the user.
-   Core Method：   
+   Remote MCP tools are developed based on the Model Context Protocol (MCP). For more details, please refer to
+   the [MCP Protocol Documentation](https://modelcontextprotocol.io/docs/learn/server-concepts).
+   The core implementation class, [
+   `RemoteMcpService`](service/chat-service/src/main/java/com/songshilong/service/chat/infrastructure/mcp/remote/RemoteMcpService.java),
+   handles the tool discovery and invocation processes based on the MCP protocol, using the MCP endpoint addresses
+   provided by the user.
+   Core Method：
     - `fetchToolsFromUrl`: Fetches the list of tools from the specified MCP endpoint URL.
 
    ```java
@@ -93,6 +111,7 @@ Compatibility: [Refer to the Spring Cloud Version Mapping for the corresponding 
         return tools;
     }
    ```
+
 ## Configuration File Examples for Each Service
 
 1. user-service
