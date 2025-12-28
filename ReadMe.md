@@ -103,7 +103,7 @@ Version Compatibility: [Refer to the Spring Cloud Version Mapping for the corres
     ```
 
 2. chat-service
-```yaml
+    ```yaml
     server:
       port: 9002
       servlet:
@@ -145,4 +145,4 @@ Version Compatibility: [Refer to the Spring Cloud Version Mapping for the corres
           key-secret: <Your Data>
           bucket-name: <Your Data>
           region: <Your Data>
-```
+    ```
