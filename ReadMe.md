@@ -32,12 +32,69 @@ Based on the interface design, Nexus Frontend provides:
 - **🤖 Model Management**: Visual interface for configuring and switching AI models.
 
 ## Environmental Requirements
+
 JDK Version: JDK 21 (Spring Boot 3.5.8 requires JDK 17 or higher)
-Version Compatibility: [Refer to the Spring Cloud Version Mapping for the corresponding relationship between Spring Boot and Spring Cloud.](https://spring.io/projects/spring-cloud)
+Version
+Compatibility: [Refer to the Spring Cloud Version Mapping for the corresponding relationship between Spring Boot and Spring Cloud.](https://spring.io/projects/spring-cloud)
 
+## MCP Tool Integration and Agent Implementation
 
+1. **Local Agent Tool Registration**
 
+   The project provides a custom
+   annotation, [`@AgentTool`](service/chat-service/src/main/java/com/songshilong/service/chat/infrastructure/mcp/local/AgentTool.java),
+   specifically designed to mark locally implemented Agent Tools.
+
+   During application startup, the system leverages Spring Boot's event listening mechanism. The
+   class [`LocalToolRegistry`](service/chat-service/src/main/java/com/songshilong/service/chat/infrastructure/mcp/local/LocalToolRegistry.java)
+   implements the `ApplicationListener<ApplicationReadyEvent>` interface. Once the application is ready, it scans all
+   registered Beans for methods annotated with `@AgentTool`. These instances are then registered with the MCP Tool
+   Management
+   Center, completing the registration of local Agent Tools.
+
+   ```java
+   import org.springframework.stereotype.Component;
+   import java.time.LocalDateTime;    
+   @ Component
+   public class BasicTools {
+      
+        @AgentTool(name = "current_time", description = "获取当前的时间，格式为YYYY-MM-DD HH:MM:SS")
+        public String currentTime() {
+        return LocalDateTime.now().toString().replace('T', ' ');
+        }
+   }
+   ```
+
+2. Remote MCP Tool Registration  
+
+   Remote MCP tools are developed based on the Model Context Protocol (MCP). For more details, please refer to the [MCP Protocol Documentation](https://modelcontextprotocol.io/docs/learn/server-concepts).
+   The core implementation class, [`RemoteMcpService`](service/chat-service/src/main/java/com/songshilong/service/chat/infrastructure/mcp/remote/RemoteMcpService.java), handles the tool discovery and invocation processes based on the MCP protocol, using the MCP endpoint addresses provided by the user.
+   Core Method：   
+    - `fetchToolsFromUrl`: Fetches the list of tools from the specified MCP endpoint URL.
+
+   ```java
+    public Map<String, ToolExecutor> fetchToolsFromUrl(String mcpEndpointUrl) {
+        Map<String, ToolExecutor> tools = new HashMap<>();
+        try {
+
+            JsonRpcMessage req = JsonRpcMessage.call("tools/list", null);
+            JsonRpcMessage resp = restTemplate.postForObject(mcpEndpointUrl, req, JsonRpcMessage.class);
+
+            if (resp != null && resp.result() != null) {
+                ListToolsResult result = objectMapper.convertValue(resp.result(), ListToolsResult.class);
+
+                for (McpTool toolDef : result.tools()) {
+                    tools.put(toolDef.name(), new RemoteHttpExecutor(mcpEndpointUrl, toolDef, restTemplate, objectMapper));
+                }
+            }
+        } catch (Exception e) {
+            log.error("Failed to load MCP tools from {}", mcpEndpointUrl, e);
+        }
+        return tools;
+    }
+   ```
 ## Configuration File Examples for Each Service
+
 1. user-service
     ```yaml
     server:

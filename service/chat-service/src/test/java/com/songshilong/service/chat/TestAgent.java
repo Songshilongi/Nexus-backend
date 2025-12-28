@@ -37,7 +37,7 @@ public class TestAgent {
         });
 
         System.out.println("---- Execute current_time tool ----");
-        System.out.println(this.agentToolManager.execute("current_time", Collections.emptyMap()));
+        System.out.println(this.agentToolManager.execute("get_server_time", Collections.emptyMap()));
 
         System.out.println(this.agentToolManager.execute("calculate_sqrt", Map.of("number", 16)));
     }
