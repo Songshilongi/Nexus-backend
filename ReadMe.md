@@ -52,6 +52,10 @@ JDK Version: JDK 21 (Spring Boot 3.5.8 requires JDK 17 or higher)
 Version
 Compatibility: [Refer to the Spring Cloud Version Mapping for the corresponding relationship between Spring Boot and Spring Cloud.](https://spring.io/projects/spring-cloud)
 
+## AI Chat Core Execution Architecture  
+
+![Core Execution Architecture](/document/images/process.png)
+
 ## MCP Tool Integration and Agent Implementation
 
 1. **Local Agent Tool Registration**
@@ -82,7 +86,7 @@ Compatibility: [Refer to the Spring Cloud Version Mapping for the corresponding 
    }
    ```
 
-2. Remote MCP Tool Registration
+2. **Remote MCP Tool Registration**
 
    Remote MCP tools are developed based on the Model Context Protocol (MCP). For more details, please refer to
    the [MCP Protocol Documentation](https://modelcontextprotocol.io/docs/learn/server-concepts).
