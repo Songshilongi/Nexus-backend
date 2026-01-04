@@ -46,13 +46,34 @@ Based on the interface design, Nexus Frontend provides:
 - **🔌 MCP Integration**: Management for Model Context Protocol resources.
 - **🤖 Model Management**: Visual interface for configuring and switching AI models.
 
+## Project Setup
+
+1. **Clone the Repository**
+
+   ```bash
+   git clone https://github.com/Songshilongi/Nexus-backend
+   ```
+2. **Navigate to the Project Directory**
+
+   ```bash
+    cd Nexus-backend
+   ```
+3. **Build the Project Using Maven**
+    ```bash
+    mvn clean install
+   ```
+4. **Run the Services**
+    - `ChatServiceApplication`: `com.songshilong.service.chat.ChatServiceApplication`
+    - `UserServiceApplication`: `com.songshilong.service.user.UserServiceApplication`
+    - `GatewayServiceApplication`: `com.songshilong.service.gateway.GatewayServiceApplication`
+
 ## Environmental Requirements
 
 JDK Version: JDK 21 (Spring Boot 3.5.8 requires JDK 17 or higher)
 Version
 Compatibility: [Refer to the Spring Cloud Version Mapping for the corresponding relationship between Spring Boot and Spring Cloud.](https://spring.io/projects/spring-cloud)
 
-## AI Chat Core Execution Architecture  
+## AI Chat Core Execution Architecture
 
 ![Core Execution Architecture](/document/images/process.png)
 
