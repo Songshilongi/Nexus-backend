@@ -56,7 +56,7 @@ Based on the interface design, Nexus Frontend provides:
 2. **Navigate to the Project Directory**
 
    ```bash
-    cd Nexus-backend
+   cd Nexus-backend
    ```
 3. **Build the Project Using Maven**
     ```bash
