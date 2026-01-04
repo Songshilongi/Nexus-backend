@@ -4,7 +4,6 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.map.MapUtil;
 import com.songshilong.module.starter.common.constants.Constant;
 import com.songshilong.module.starter.common.utils.JwtUtil;
-import org.apache.http.protocol.HTTP;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.http.HttpHeaders;

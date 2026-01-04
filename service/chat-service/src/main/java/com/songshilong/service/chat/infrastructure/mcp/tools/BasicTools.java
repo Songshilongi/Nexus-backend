@@ -1,6 +1,5 @@
 package com.songshilong.service.chat.infrastructure.mcp.tools;
 
-import com.songshilong.service.chat.infrastructure.mcp.local.AgentTool;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
