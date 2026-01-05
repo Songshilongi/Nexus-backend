@@ -250,3 +250,49 @@ Compatibility: [Refer to the Spring Cloud Version Mapping for the corresponding 
           bucket-name: <Your Data>
           region: <Your Data>
     ```
+3. gateway-service
+   ```yaml
+   server:
+     port: 9000
+   
+   spring:
+     application:
+       name: gateway-service
+     cloud:
+       gateway:
+         server:
+           webflux:
+             routes:
+               - id: user-service
+                 uri: http://localhost:9001
+                 predicates:
+                   - Path=/nexus/user-service/**
+                 filters:
+                   - RewritePath=/nexus/user-service/(?<segment>.*), /api/user-service/$\{segment}
+               - id: chat-service
+                 uri: http://localhost:9002
+                 predicates:
+                   - Path=/nexus/chat-service/**
+                 filters:
+                   - RewritePath=/nexus/chat-service/(?<segment>.*), /api/chat-service/$\{segment}
+                   - name: UserLoginFilter
+                     args:
+                       blackPathPre:
+                         - /api/chat-service/
+                       jwtSecret: <Your Data>
+             globalcors:
+               add-to-simple-url-handler-mapping: true
+               cors-configurations:
+                 '[/**]':
+                   allowedOriginPatterns:
+                     - "*"  
+                   allowedMethods:
+                     - GET
+                     - POST
+                     - DELETE
+                     - PUT
+                     - OPTIONS
+                   allowedHeaders: "*"
+                   allowCredentials: true
+                   maxAge: 3600
+   ```
