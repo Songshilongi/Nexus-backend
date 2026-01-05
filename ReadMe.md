@@ -28,14 +28,13 @@
      welcome!
 >
 > 2. The project has been renamed from **"Chemical Platform Frontend"** to **"Nexus Frontend"**. Originally focused on
-     my
-     > Master's thesis research in chemical platforms, the project was renamed to better reflect its actual scope and
-     > positioning, as the completed work now offers much broader applicability. This is also why the project artifacts
-     and
-     > code identifiers still refer to chemical-platform-backend.
+     my Master's thesis research in chemical platforms, the project was renamed to better reflect its actual scope and
+     positioning, as the completed work now offers much broader applicability. This is also why the project artifacts
+     and code identifiers still refer to chemical-platform-backend.
 
 > [!IMPORTANT]  
-> Frontend Repository: [Nexus Frontend](https://github.com/Songshilongi/Nexus-frontend)
+> Frontend Repository: [Nexus Frontend](https://github.com/Songshilongi/Nexus-frontend)  
+> bilibili Video Introduction: [Nexus Introduction Video](https://www.bilibili.com/video/BV1BsixBZEur/?vd_source=6954429a967223e179d3fa1d5360a897)
 
 ## ✨ Features
 
