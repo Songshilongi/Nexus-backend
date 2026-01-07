@@ -95,14 +95,14 @@ public class ChatController {
     }
 
 
-    @PostMapping("image/upload-batch/")
+    @PostMapping("image/upload-batch")
     @ApiOperation("上传图片-批量")
     public Result<List<String>> uploadImage(@RequestPart("files") List<MultipartFile> files) {
         List<String> urls = chatService.uploadImageBatch(files);
         return Result.success(urls);
     }
 
-    @PostMapping("image/upload-single/")
+    @PostMapping("image/upload-single")
     @ApiOperation("上传图片-单个")
     public Result<String> uploadImage(@RequestPart("file") MultipartFile file) {
         String url = chatService.uploadImage(file);
