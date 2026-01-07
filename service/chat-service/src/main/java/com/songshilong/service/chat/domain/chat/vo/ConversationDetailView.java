@@ -34,7 +34,7 @@ public class ConversationDetailView {
                 .map(message -> {
                     MessageView messageView = new MessageView();
                     messageView.setRole(message.getRole());
-                    message.getContents().stream()
+                    message.getContent().stream()
                             .filter(content -> content.getType().equals("text"))
                             .findFirst()
                             .ifPresent(textContent -> messageView.setContent(textContent.getText()));

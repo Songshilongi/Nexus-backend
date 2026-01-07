@@ -1,5 +1,7 @@
 package com.songshilong.service.chat.infrastructure.utils;
 
+import com.songshilong.module.starter.common.utils.BeanUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
@@ -19,6 +21,7 @@ import java.util.Map;
  * @Version: 1.0
  */
 @Component
+@Slf4j
 public class HttpUtils {
     private final WebClient webClient;
 
@@ -84,6 +87,10 @@ public class HttpUtils {
      * @return 响应体内容的流 (Flux<String>)
      */
     public Flux<String> postForStream(String url, Object body, Map<String, String> headers) {
+        log.info("========== LLM Stream Request ==========");
+        log.info("URL: {}", url);
+        log.info("Headers: {}", BeanUtil.toJSON(headers));
+        log.info("Body: {}", BeanUtil.toJSON(body));
         return webClient
                 .post()
                 .uri(url)
