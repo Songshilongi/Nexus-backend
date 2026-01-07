@@ -1,10 +1,13 @@
 package com.songshilong.service.chat.domain.chat.req;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.songshilong.service.chat.infrastructure.llm.message.Message;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
+
+import java.util.List;
 
 /**
  * @BelongsProject: chemical-platform-backend
@@ -26,8 +29,18 @@ public class AddMessageRequest {
     @NotEmpty
     private String content;
 
+    @ApiModelProperty("图片 URL 列表")
+    private List<String> imageUrls;
+
 
     public static Message toMessage(AddMessageRequest request) {
+        if (request.getRole().equals("user")) {
+            List<String> urls = request.getImageUrls();
+            if (CollectionUtil.isEmpty(urls)) {
+                return Message.ofUser(request.getContent());
+            }
+            return Message.ofUser(request.getContent(), urls);
+        }
         return Message.of(request.getRole(), request.getContent());
     }
 }

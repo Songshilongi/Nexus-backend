@@ -1,6 +1,5 @@
 package com.songshilong.service.chat.application.service;
 
-import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.lang.generator.SnowflakeGenerator;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -118,7 +117,7 @@ public class ChatServiceImpl implements ChatService {
         List<Message> messages = this.buildMessages(chatCallRequest, conversationRecord);
         Boolean toolUseAllowed = Optional.ofNullable(chatCallRequest.getToolUseAllowed()).orElse(Boolean.FALSE);
         if (!toolUseAllowed) {
-            return client.callStream(messages, false);
+            return client.callStream(messages, true);
         }
         Map<String, ToolExecutor> tools = this.agentToolManager.getToolsForSession(this.loadUserMcpUrls(chatCallRequest.getUserId()));
         McpAgent mcpAgent = new McpAgent(client, this.agentToolManager);
@@ -177,10 +176,14 @@ public class ChatServiceImpl implements ChatService {
      */
     private List<Message> buildMessages(ChatCallRequest chatCallRequest, ConversationRecordDTO conversationRecord) {
         List<Message> messages = conversationRecord.getMessages();
-        if (CollectionUtil.isEmpty(messages)) {
-            return List.of(Message.ofUser(chatCallRequest.getUserQuestion()));
+        Boolean useTool = Optional.ofNullable(chatCallRequest.getToolUseAllowed()).orElseGet(() -> Boolean.FALSE);
+        if (!useTool) {
+            return messages;
         }
-        messages.add(Message.ofUser(chatCallRequest.getUserQuestion()));
+        Message newMessage = Message.ofUserToolUsed(chatCallRequest);
+        if (newMessage != null) {
+            messages.add(newMessage);
+        }
         return messages;
     }
 

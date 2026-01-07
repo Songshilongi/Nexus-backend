@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import java.util.Map;
+
 
 /**
  * @BelongsProject: chemical-platform-backend
@@ -24,14 +26,14 @@ public class Content {
     private String text;
 
     @Field("image_url")
-    private String image_url;
+    private Map<String, String> image_url;
 
     public static Content ofText(String text) {
         return new Content("text", text, null);
     }
 
     public static Content ofImage(String imageUrl) {
-        return new Content("image_url", null, imageUrl);
+        return new Content("image_url", null, Map.of("url", imageUrl));
     }
 
 

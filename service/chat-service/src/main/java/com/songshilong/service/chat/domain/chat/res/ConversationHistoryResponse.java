@@ -36,7 +36,7 @@ public class ConversationHistoryResponse {
                     dto.setConversationId(record.getId());
                     dto.setSummary("空白对话");
                     if (CollectionUtil.isNotEmpty(record.getMessages()) && record.getMessages().size() > 1) {
-                        List<Content> contents = record.getMessages().getFirst().getContents();
+                        List<Content> contents = record.getMessages().getFirst().getContent();
                         contents.stream()
                                 .filter(content -> content.getType().equals("text"))
                                 .findFirst().ifPresent(text -> dto.setSummary(text.getText()));

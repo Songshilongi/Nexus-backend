@@ -83,7 +83,7 @@ public class LLMClient implements LLMInteraction {
             List<Map<String, String>> data = new ArrayList<>();
             for (Message message : messages) {
                 Map<String, String> map = new HashMap<>();
-                List<Content> contents = message.getContents();
+                List<Content> contents = message.getContent();
                 contents.stream()
                         .filter(content -> content.getType().equals(TEXT))
                         .findFirst()
