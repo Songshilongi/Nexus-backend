@@ -2,6 +2,8 @@ package com.songshilong.service.chat.domain.chat.vo;
 
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * @BelongsProject: chemical-platform-backend
  * @BelongsPackage: com.songshilong.service.chat.domain.chat.vo
@@ -14,4 +16,5 @@ import lombok.Data;
 public class MessageView {
     private String role;
     private String content;
+    private List<String> urls;
 }
