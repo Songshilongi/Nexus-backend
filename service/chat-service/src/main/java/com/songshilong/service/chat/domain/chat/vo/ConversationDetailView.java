@@ -38,6 +38,13 @@ public class ConversationDetailView {
                             .filter(content -> content.getType().equals("text"))
                             .findFirst()
                             .ifPresent(textContent -> messageView.setContent(textContent.getText()));
+                    message.getContent().stream()
+                            .filter(content -> content.getType().equals("image_url"))
+                            .findFirst()
+                            .ifPresent(imageContent -> {
+                                String url = imageContent.getImage_url().get("url");
+                                messageView.setUrls(List.of(url));
+                            });
                     return messageView;
                 }).toList();
         view.setMessages(list);
